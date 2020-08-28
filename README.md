@@ -16,6 +16,6 @@
 * Universal App mit Angular
 * Multilanguage
 * Web Content Accessibility Guidelines (WCAG) 2.0
- * http://www.w3.org/WAI/intro/wcag.php
+  *  http://www.w3.org/WAI/intro/wcag.php
 * SEO
 * Versuchen die Webseite auf IE8 ausführen
