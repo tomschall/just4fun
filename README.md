@@ -12,7 +12,7 @@
 * Deployment in die Cloud
 * Performance Optimierung
 * Progressive Web Apps
- * Offline Modus
+  * Offline Modus
 * Universal App mit Angular
 * Multilanguage
 * Web Content Accessibility Guidelines (WCAG) 2.0
