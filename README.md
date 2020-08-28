@@ -19,3 +19,4 @@
   *  http://www.w3.org/WAI/intro/wcag.php
 * SEO
 * Versuchen die Webseite auf IE8 ausführen
+[Detail beschreibung (pdf)](Projekt2-beschreibung.pdf )
