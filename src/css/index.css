@@ -1,0 +1,27 @@
+body {
+	font-weight: 200;
+	height: calc(100% - 1em);
+}
+
+header {
+	margin-bottom: 20px;
+}
+header a,
+footer a {
+	color: #009444;
+}
+
+.bg-text-color {
+	color: black;
+}
+
+footer {
+	font-size: 0.8em;
+	background-color: rgba(0, 148, 68, 0.2);
+}
+
+.bg-primary,
+.btn-primary {
+	background-color: #377bb5 !important;
+	border: inherit;
+}
