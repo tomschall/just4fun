@@ -11,8 +11,12 @@ import Login from './pages/Login';
 import AddAppointments from './AddAppointments';
 import ListAppointments from './ListAppointments';
 import SearchAppointments from './SearchAppointments';
+import Header2 from '../components/ui/Header2';
 import '../css/App.css';
 import { without, findIndex } from 'lodash';
+import { ThemeProvider, ThmeProvider } from '@material-ui/styles';
+
+import theme from '../components/ui/Theme'
 
 class App extends Component {
 	constructor() {
@@ -78,7 +82,22 @@ class App extends Component {
 	}
 	render() {
 		return (
+		
 			<Router>
+			<ThemeProvider theme={theme}>
+			<Router>
+				<Header2 />
+				<Switch>				
+				<Route exact path="/" component={Home} />
+				<Route path="/about" component={About} />
+				<Route path="/interpreting" component={TelephoneInterpreting} />
+				<Route path="/faq" component={Faq} />
+				<Route path="/reviews" component={Reviews} />
+				<Route path="/login" render={() => <Login user={this.state.user} />} />
+			</Switch>
+			</Router>
+				
+			</ThemeProvider>
 				<main className="page bg-white" id="petratings">
 					<div className="container layout-container">
 						<Header user={this.state.user} />

@@ -1,6 +1,6 @@
 body {
-	font-weight: 200;
-	height: calc(100% - 1em);
+	font-family: 'Titillium Web', sans-serif;
+	font-size: 18px;
 }
 
 header {
@@ -15,7 +15,9 @@ footer a {
 	color: black;
 }
 
-footer {
+footer {	
+	
+	padding: 1rem;
 	font-size: 0.8em;
 	background-color: rgba(0, 148, 68, 0.2);
 }
