@@ -7,9 +7,9 @@ import App from './components/App';
 import WebFont from 'webfontloader';
 
 WebFont.load({
-  google: {
-    families: ['Titillium Web:300,400,700', 'sans-serif']
-  }
+	google: {
+		families: ['Titillium Web:300,400,700', 'sans-serif'],
+	},
 });
 ReactDOM.render(
 	<React.StrictMode>
