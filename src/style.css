@@ -1,6 +1,7 @@
-body { 
-  height: 100%;
+.PrivateTabIndicator-colorPrimary-15 {
+	background-color: #ff0000 !important;
 }
-footer {
-  margin-top: auto;
+.MuiButtonBase-root:hover {
+	color: inherit;
+	text-decoration: none;
 }

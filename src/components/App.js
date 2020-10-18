@@ -1,22 +1,34 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Header from './layout/Header';
-import Footer from './layout/Footer';
+import firebase from './Firebase';
+
 import Home from './pages/Home';
 import About from './pages/About';
 import TelephoneInterpreting from './pages/TelephoneInterpreting';
 import Faq from './pages/Faq';
 import Reviews from './pages/Reviews';
-import Login from './pages/Login';
+import Login from './Login';
+import Navigation from './Navigation';
+import Register from './Register';
+import Appointments from './Appointments';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
+import SignInOriginal from './SignInOriginal';
+
+import Welcome from './Welcome';
+import Appointmentsold from './AppointmentsOld';
 import AddAppointments from './AddAppointments';
 import ListAppointments from './ListAppointments';
 import SearchAppointments from './SearchAppointments';
 import Header2 from '../components/ui/Header2';
+import Footer2 from '../components/ui/Footer2';
+
 import '../css/App.css';
 import { without, findIndex } from 'lodash';
-import { ThemeProvider, ThmeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core';
 
-import theme from '../components/ui/Theme'
+import theme from '../components/ui/Theme';
+import { navigate } from '@reach/router';
 
 class App extends Component {
 	constructor() {
@@ -25,7 +37,9 @@ class App extends Component {
 			myAppointments: [],
 			formDisplay: false,
 			lastIndex: 0,
-			user: 'Nigsty',
+			user: null,
+			displayName: null,
+			userID: null,
 		};
 
 		this.deleteAppointment = this.deleteAppointment.bind(this);
@@ -33,6 +47,7 @@ class App extends Component {
 		this.addAppointment = this.addAppointment.bind(this);
 		this.updateInfo = this.updateInfo.bind(this);
 	}
+
 	toggleForm() {
 		this.setState({
 			formDisplay: !this.state.formDisplay,
@@ -79,68 +94,102 @@ class App extends Component {
 					myAppointments: apts,
 				});
 			});
+
+		firebase.auth().onAuthStateChanged((FBUser) => {
+			if (FBUser) {
+				this.setState({
+					user: FBUser,
+					displayName: FBUser.displayName,
+					userID: FBUser.uid,
+				});
+				
+				const appointmentsRef = firebase
+					.database()
+					.ref('appointments/' + FBUser.uid);
+					appointmentsRef.on('value', snapshot => {
+						let appointments = snapshot.val();
+						let appointmentsList = [];
+
+						for(let item in appointments){
+							appointmentsList.push({
+								appointmentID: item,
+								thema: appointments[item].thema
+							});
+						}
+						
+						this.setState({
+							appointments:appointmentsList,
+							howManyAppointments: appointmentsList.length
+						});
+
+					})
+			} else {
+				this.setState({user: null});
+			}
+		});
 	}
+	registerUser = (userName) => {
+		firebase.auth().onAuthStateChanged((FBUser) => {
+			FBUser.updateProfile({
+				displayName: userName,
+			}).then(() => {
+				this.setState({
+					user: FBUser,
+					displayName: FBUser.displayName,
+					userID: FBUser.uid,
+				});
+				navigate('/welcome');
+			});
+		});
+	};
+
+	logOutUser = (e) => {
+		e.preventDefault();
+		this.setState({
+			displayName: null,
+			userID: null,
+			user: null,
+		});
+		firebase
+			.auth()
+			.signOut()
+			.then(() => {
+				navigate('/login');
+			});
+	};
+
+	addAppointment = thema => {
+		const ref = firebase
+		.database()
+		.ref(`appointments/${this.state.user.uid}`);
+		ref.push({ thema: thema });
+	};
+
 	render() {
 		return (
-		
-			<Router>
-			<ThemeProvider theme={theme}>
-			<Router>
-				<Header2 />
-				<Switch>				
-				<Route exact path="/" component={Home} />
-				<Route path="/about" component={About} />
-				<Route path="/interpreting" component={TelephoneInterpreting} />
-				<Route path="/faq" component={Faq} />
-				<Route path="/reviews" component={Reviews} />
-				<Route path="/login" render={() => <Login user={this.state.user} />} />
-			</Switch>
-			</Router>
-				
-			</ThemeProvider>
-				<main className="page bg-white" id="petratings">
-					<div className="container layout-container">
-						<Header user={this.state.user} />
+			<div className="layout-container">
+				<ThemeProvider theme={theme}>
+					<Router>
+						<Header2 />
 						<div className="layout-content">
-							<Switch>
-								<Route exact path="/" component={Home} />
-								<Route
-									path="/add-list-appointment"
-									render={(props) => (
-										<React.Fragment>
-											<div className="row">
-												<div className="col-md-12 bg-white">
-													<div className="container">
-														<AddAppointments
-															formDisplay={this.state.formDisplay}
-															toggleForm={this.toggleForm}
-															addAppointment={this.addAppointment}
-														/>
-														<ListAppointments
-															appointments={this.state.myAppointments}
-															deleteAppointment={this.deleteAppointment}
-															updateInfo={this.updateInfo}
-														/>
-														<SearchAppointments />
-													</div>{' '}
-													{/* comment example */}
-												</div>
-											</div>
-										</React.Fragment>
-									)}
-								/>{' '}
-								{/* Route add-list-appointment */}
+							<Switch>								
+								<Route exact path="/" component={Home} user={this.state.user} />
 								<Route path="/about" component={About} />
 								<Route path="/interpreting" component={TelephoneInterpreting} />
 								<Route path="/faq" component={Faq} />
 								<Route path="/reviews" component={Reviews} />
+								<Appointments path="/appointments" addAppointment={this.addAppointment} />
+								<Route path="/signin" component={SignIn} />
+								<Route path="/signInOrig" component={SignInOriginal} />
+								<Route path="/signup" component={SignUp} registerUser={this.registerUser} />
 								<Route path="/login" render={() => <Login user={this.state.user} />} />
+								<Route path="/register" registerUser={this.registerUser} />
 							</Switch>
 						</div>
-						<Footer />
-					</div>
-				</main>
-			</Router>
+					</Router>
+					<Footer2 />
+				</ThemeProvider>
+			</div>
 		);
 	}
 }
