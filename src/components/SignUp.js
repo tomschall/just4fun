@@ -18,20 +18,8 @@ import Container from '@material-ui/core/Container';
 import firebase from './Firebase';
 import FormError from './FormError';
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="https://habescha.ch/">
-				Your Website
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
-	);
-}
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
 	paper: {
 		marginTop: theme.spacing(8),
 		display: 'flex',
@@ -49,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
-}));
+});
 
 class SignUp extends Component {
 	constructor(props) {
@@ -108,7 +96,7 @@ class SignUp extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
-						Sign up
+					Registrieren
 					</Typography>
 					<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
 						{this.state.errorMessage !== null ? <FormError theMessage={this.state.errorMessage} /> : null}
@@ -162,23 +150,21 @@ class SignUp extends Component {
               </Grid> */}
 						</Grid>
 						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-							Sign Up
+							Registrieren
 						</Button>
 						<Grid container justify="flex-end">
 							<Grid item>
+							{"Haben Sie berits ein Login? "}
 								<Link href="./signin" variant="body2">
-									Already have an account? Sign in
+									Hier einloggen.
 								</Link>
 							</Grid>
 						</Grid>
 					</form>
 				</div>
-				<Box mt={5}>
-					<Copyright />
-				</Box>
 			</Container>
 		);
 	}
 }
 
-export default withStyles(useStyles)(SignUp);
+export default withStyles(styles)(SignUp);

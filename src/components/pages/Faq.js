@@ -1,6 +1,11 @@
 import React from 'react';
 import { makeStyles, useTheme, Grid, Typography} from '@material-ui/core';
 
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		padding: 20,
@@ -16,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	mainContainer: {
-		marginTop: '4em',
+		marginTop: '2em',
 		[theme.breakpoints.down('md')]: {
 			marginTop: '2em',
 		},
@@ -26,13 +31,12 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
+const faqContainer = [{heading: 'Frage 1',  body: 'Body text 1'},{heading: 'Frage 2',  body: 'Body text 2'}]
+
 const faqHeading = 'Häufig gestellte Fragen';
-const faqBodyText =
-	'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way. When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then ';
 
 function Faq() {
 	const classes = useStyles();
-	const theme = useTheme();
 
 	return (
 		<div className={classes.root}>
@@ -47,9 +51,24 @@ function Faq() {
 						<Grid item xs={12}>
 							<Grid container>
 								<Grid item item xs={12} md={12}>
+								{faqContainer.map(faq => {
+									return (
+								<Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography className={classes.heading}>{faq.heading}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>{faq.body}
+          </Typography>
+        </AccordionDetails>
+      </Accordion>)} )}{/* 
 								<Typography variant="body1" gutterBottom>
 									{faqBodyText}
-								</Typography>
+								</Typography> */}
 								</Grid>								
 							</Grid>
 						</Grid>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { makeStyles } from '@material-ui/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -17,6 +16,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Welcome from '../Welcome';
+import humberger from '../../assets/humberger2.png';
 
 import logo from '../../assets/habescha-web-interpret-logo.svg';
 
@@ -57,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	logoContainer: {
 		paddingLeft: '4em',
+		[theme.breakpoints.down('xs')]: {
+			paddingLeft: '1em',
+		},
 		'&hover': {
 			backgroundColor: 'transparent',
 		},
@@ -112,10 +115,12 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: 'white',
 		color: theme.palette.common.green,
 	},
+	testClasse:{
+		backgroundColor: theme.palette.common.red,
+	}
 }));
 
-export default function Header2(props) {
-
+export default function Header(props) {
 	const classes = useStyles();
 	const theme = useTheme();
 	const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -123,6 +128,8 @@ export default function Header2(props) {
 
 	const [openDrawer, setOpenDrawer] = useState(false);
 	const [value, setValue] = useState(0);
+
+	const { userName, user, logOutUser } = props;
 
 	const handleChange = (e, value) => {
 		setValue(value);
@@ -144,7 +151,7 @@ export default function Header2(props) {
 
 	const routes = [
 		{ name: 'Home', link: '/', activeIndex: 0 },
-		{ name: 'About', link: '/about', activeIndex: 1 },
+		{ name: 'Über mich', link: '/about', activeIndex: 1 },
 		{ name: 'Telephonedolmetschen', link: '/interpreting', activeIndex: 2 },
 		{ name: 'FAQ', link: '/faq', activeIndex: 3 },
 		{ name: 'Kundenbewertungen', link: '/reviews', activeIndex: 4 },
@@ -152,7 +159,7 @@ export default function Header2(props) {
 
 	const tabs = (
 		<React.Fragment>
-			<Tabs value={value} onChange={handleChange} className={classes.tabContainer} indicatorColor="primary">
+			<Tabs value={value} onChange={handleChange} className={classes.tabContainer} indicatorColor="primary" classes={{indicator: classes.testClasse}}>
 				{routes.map((route, index) => (
 					<Tab
 						key={`${route}${index}`}
@@ -163,9 +170,26 @@ export default function Header2(props) {
 					/>
 				))}
 			</Tabs>
-			<Button variant="contained" color="secondary" className={classes.button}>
-				Login
-			</Button>
+			{user ? (
+				<Button 
+					variant="contained" 
+					color="secondary" 
+					className={classes.button} 
+					onClick={logOutUser}
+					>
+					Logout 
+				</Button>
+			) : (
+				<Button
+					component={Link}
+					to={'/signin'}
+					variant="contained"
+					color="secondary"
+					className={classes.button}
+				>
+					Login
+				</Button>
+			)}
 		</React.Fragment>
 	);
 	const drawer = (
@@ -211,7 +235,7 @@ export default function Header2(props) {
 							root: classes.drawerItmeLogin,
 							selected: classes.drawerItemSelected,
 						}}
-						to="/login"
+						to="/signin"
 						selected={value === 5}
 					>
 						<ListItemText className={classes.drawerItem} disableTypography>
@@ -238,7 +262,7 @@ export default function Header2(props) {
 							component={Link}
 							to="/"
 							disableRipple
-							onClick={() => props.setValue(0)}
+							//onClick={() => props.setValue(0)}
 							className={classes.logoContainer}
 						>
 							<img alt="Habescha logo" className={classes.logo} src={logo} />

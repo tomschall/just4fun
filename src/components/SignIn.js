@@ -5,34 +5,19 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import firebase from './Firebase';
 import FormError from './FormError';
 import { navigate } from '@reach/router';
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="https://material-ui.com/">
-				Your Website
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
-	);
-}
+import messages from './messages';
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
 	paper: {
 		marginTop: theme.spacing(8),
 		display: 'flex',
@@ -50,10 +35,10 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
-}));
+});
 
 class SignIn extends Component {
-		constructor(props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			email: '',
@@ -81,16 +66,16 @@ class SignIn extends Component {
 
 		firebase
 			.auth()
-			.signInWithEmailAndPassword(
-				registrationInfo.email, 
-				registrationInfo.password
-			)
+			.signInWithEmailAndPassword(registrationInfo.email, registrationInfo.password)
 			.then(() => {
 				navigate('/');
 			})
 			.catch((error) => {
+				console.log('Firebase Error:', error.code, error);
+
 				if (error.message !== null) {
-					this.setState({ errorMessage: error.message });
+					let errorMessage = messages[error.code] || error.message;
+					this.setState({ errorMessage });
 				} else {
 					this.setState({ errorMessage: null });
 				}
@@ -106,14 +91,10 @@ class SignIn extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
-						Sign in
+						Login
 					</Typography>
 					<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
-						{this.state.errorMessage !== null ? (
-							<FormError 
-								theMessage={this.state.errorMessage} 
-							/>
-						 ) : null}
+						{this.state.errorMessage !== null ? <FormError theMessage={this.state.errorMessage} /> : null}
 						<TextField
 							variant="outlined"
 							margin="normal"
@@ -123,7 +104,7 @@ class SignIn extends Component {
 							label="Email Address"
 							name="email"
 							autoComplete="email"
-							autoFocus							
+							autoFocus
 							value={this.state.email}
 							onChange={this.handleChange}
 						/>
@@ -136,13 +117,13 @@ class SignIn extends Component {
 							label="Password"
 							type="password"
 							id="password"
-							autoComplete="current-password"							
+							autoComplete="current-password"
 							value={this.state.password}
 							onChange={this.handleChange}
 						/>
-						<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+						{/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
 						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-							Sign In
+							Anmelden
 						</Button>
 						<Grid container>
 							<Grid item xs>
@@ -151,19 +132,17 @@ class SignIn extends Component {
 								</Link>
 							</Grid>
 							<Grid item>
+								{'Neu bei Habesch? '}
 								<Link href="/signup" variant="body2">
-									{"Don't have an account? Sign Up"}
+									{' Jetzt Registrieren.'}
 								</Link>
 							</Grid>
 						</Grid>
 					</form>
 				</div>
-				<Box mt={8}>
-					<Copyright />
-				</Box>
 			</Container>
 		);
 	}
 }
 
-export default withStyles(useStyles)(SignIn);
+export default withStyles(styles)(SignIn);

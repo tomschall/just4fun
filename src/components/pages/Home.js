@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Paper, Grid, Typography } from '@material-ui/core';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -13,6 +14,12 @@ const useStyles = makeStyles((theme) => ({
 		fontWeight: 'bold',
 		margin: 'auto',
 		maxWidth: 400,
+		'&hover': {
+			color: 'red'
+		},
+		[theme.breakpoints.down('xs')]: {
+			maxWidth: 250,
+		},
 	},
 	mainContainer: {
 		marginTop: '10em',
@@ -23,6 +30,17 @@ const useStyles = makeStyles((theme) => ({
 			marginTop: '10em',
 		},
 	},
+	homeLink: {
+		textDecoration: 'none',
+		'&:hover': {
+			textDecoration: 'none',
+		}
+	},
+	'@global': {
+		a: {			
+			'&:hover': {textDecoration: 'none',}
+		}
+	}
 }));
 
 function Home() {
@@ -30,12 +48,14 @@ function Home() {
 	return (
 		<div className={classes.root}>
 			<Grid  container direction="column" justify="center" alignItems="center" className={classes.mainContainer}>
-				<Grid item >
+				<Grid  item >
+				<Link underline='none' href="./appointments" variant="body2">
 					<Paper className={classes.paper}>
-						<Typography variant="h2">
+						<Typography variant="h2" >
 							Termin vereinbaren?
 						</Typography>
 					</Paper>
+					</Link>
 				</Grid>
 			</Grid>
 		</div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, useTheme, Grid, Typography} from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	mainContainer: {
-		marginTop: '4em',
+		marginTop: '2em',
 		[theme.breakpoints.down('md')]: {
 			marginTop: '2em',
 		},
@@ -33,7 +34,7 @@ const reviewBodyText =
 function Reviews() {
 	const classes = useStyles();
 	const theme = useTheme();
-
+	const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 	return (
 		<div className={classes.root}>
 			<Grid container className={classes.mainContainer} >
@@ -41,7 +42,10 @@ function Reviews() {
 				<Grid item item xs={12} md={8}>
 					<Grid container>
 						<Grid item xs={12}>
-							<Typography variant="h1" color="primary" gutterBottom>
+						<Typography
+						align={matchesXS ? 'center' : undefined} 
+						style={{fontSize: matchesXS ? '2.5rem' : null}}
+						variant="h1" color="primary" gutterBottom>
 									{reviewHeading}
 							</Typography></Grid>
 						<Grid item xs={12}>

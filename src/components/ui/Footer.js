@@ -50,11 +50,11 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '-12px',
 		marginTop: '-8px',
 		verticalAlign: 'bottom',
-		[theme.breakpoints.down('md')]: {
+		[theme.breakpoints.down('lg')]: {
 			width: '50em',
 		},
-		[theme.breakpoints.down('xs')]: {
-			width: '20em',
+		[theme.breakpoints.down('md')]: {
+			display: 'none'
 		},
 	},
 	mainContainer: {
@@ -64,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Footer() {
 	const classes = useStyles();
-	const theme = useTheme();
 
 	return (
 		<footer className={classes.footer}>
