@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FaUsers } from 'react-icons/fa';
-import { Link } from '@reach/router';
+import { Link } from 'react-router-dom';
 
 class Navigation extends Component {
 	render() {

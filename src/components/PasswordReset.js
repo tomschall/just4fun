@@ -37,7 +37,7 @@ const styles = (theme) => ({
 	},
 });
 
-class SignIn extends Component {
+class PasswordReset extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -68,8 +68,8 @@ class SignIn extends Component {
 			.auth()
 			.signInWithEmailAndPassword(registrationInfo.email, registrationInfo.password)
 			.then(() => {
-				//navigate('./appointments');
-				this.props.history.push('/appointments')
+				//	navigate(//'./appointments');
+				this.props.history.push('/appointments');
 			})
 			.catch((error) => {
 				console.log('Firebase Error:', error.code, error);
@@ -92,7 +92,7 @@ class SignIn extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
-						Login
+						Password reset
 					</Typography>
 					<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
 						{this.state.errorMessage !== null ? <FormError theMessage={this.state.errorMessage} /> : null}
@@ -109,29 +109,11 @@ class SignIn extends Component {
 							value={this.state.email}
 							onChange={this.handleChange}
 						/>
-						<TextField
-							variant="outlined"
-							margin="normal"
-							required
-							fullWidth
-							name="password"
-							label="Password"
-							type="password"
-							id="password"
-							autoComplete="current-password"
-							value={this.state.password}
-							onChange={this.handleChange}
-						/>
 						{/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
 						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
 							Anmelden
 						</Button>
 						<Grid container>
-							<Grid item xs>
-								<Link href="./password-reset" variant="body2">
-									Forgot password?
-								</Link>
-							</Grid>
 							<Grid item>
 								{'Neu bei Habesch? '}
 								<Link href="/signup" variant="body2">
@@ -146,4 +128,4 @@ class SignIn extends Component {
 	}
 }
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(PasswordReset);

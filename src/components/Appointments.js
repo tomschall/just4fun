@@ -18,6 +18,7 @@ import Paper from '@material-ui/core/Paper';
 
 import FormError from './FormError';
 import AppointmentsList from './AppointmentsList';
+import messages from './messages';
 
 const styles = (theme) => ({
 	paper: {
@@ -34,8 +35,8 @@ const styles = (theme) => ({
 		margin: theme.spacing(3, 0, 2),
 	},
 	table: {
-    minWidth: 650,
-  },
+		minWidth: 650,
+	},
 });
 
 class Appointments extends Component {
@@ -69,92 +70,122 @@ class Appointments extends Component {
 			//aptDateTime: new Date(this.state.aptDateTime),
 			aptDateTime: this.state.aptDateTime,
 		};
+		if (!tempApt.thema || !tempApt.institution || !tempApt.aptDateTime) {
+			let errorMessage = messages['empty-fields'] || 'Please fill all the fields';
+			this.setState({ errorMessage });
+			return;
+		}
+
 		this.props.addAppointment(tempApt);
 		this.setState({ thema: '', institution: '' });
 	}
 	render() {
-		const {
-			classes,
-		} = this.props; 
+		const { classes, appointments } = this.props;
 		return (
 			<>
-			<Container component="main" maxWidth="xs">
-				<CssBaseline />
-				<div className={classes.paper}>
-					<Typography component="h1" variant="h5">
-						Termin vereinbaren
-					</Typography>
-					<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
-						{this.state.errorMessage !== null ? <FormError theMessage={this.state.errorMessage} /> : null}
-						<TextField
-							variant="outlined"
-							margin="normal"
-							required
-							fullWidth
-							id="thema"
-							label="Das Thema"
-							name="thema"
-							autoComplete="thema"
-							autoFocus
-							value={this.state.thema}
-							onChange={this.handleChange}
-						/>
-						<TextField
-							variant="outlined"
-							margin="normal"
-							required
-							fullWidth
-							id="institution"
-							label="Name & Institution"
-							name="institution"
-							autoComplete="institution"
-							value={this.state.institution}
-							onChange={this.handleChange}
-						/>
-						<TextField
-							variant="outlined"
-							margin="normal"
-							required
-							fullWidth
-							name="aptDateTime"
-							id="datetime-local"
-							label="Next appointment"
-							type="datetime-local"
-							InputLabelProps={{
-								shrink: true,
-							}}
-							value={this.state.aptDateTime}
-							onChange={this.handleChange}
-						/>
-						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-							Einen Termin vereinbaren
-						</Button>
-					</form>
-				</div>				
-			</Container>
-			<Grid container spacing={2}>
-				<Grid item md={2} sm={0}></Grid>							
-				<Grid item xs={12} md={8}>
-					<TableContainer component={Paper}>
-						<Table className={classes.table} size="small" aria-label="a dense table">						
-							{this.props.appointments && this.props.appointments.length ? (																			
-								<TableHead>
-									<TableRow>
-										<TableCell align="left">Das Thema</TableCell>
-										<TableCell align="left">Institution</TableCell>
-										<TableCell align="left">Datum & Zeit</TableCell>
-									</TableRow>
-								</TableHead>							
+				<Container component="main" maxWidth="xs">
+					<CssBaseline />
+					<div className={classes.paper}>
+						<Typography component="h1" variant="h5">
+							Termin vereinbaren
+						</Typography>
+						<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
+							{this.state.errorMessage !== null ? (
+								<FormError theMessage={this.state.errorMessage} />
 							) : null}
-							<TableBody>
-								{this.props.appointments && <AppointmentsList appointments={this.props.appointments} />}
-							</TableBody>								
-						</Table>
-					</TableContainer>
+							<TextField
+								variant="outlined"
+								margin="normal"
+								required
+								fullWidth
+								id="thema"
+								label="Das Thema"
+								name="thema"
+								autoComplete="thema"
+								autoFocus
+								value={this.state.thema}
+								onChange={this.handleChange}
+							/>
+							<TextField
+								variant="outlined"
+								margin="normal"
+								required
+								fullWidth
+								id="institution"
+								label="Name & Institution"
+								name="institution"
+								autoComplete="institution"
+								value={this.state.institution}
+								onChange={this.handleChange}
+							/>
+							<TextField
+								variant="outlined"
+								margin="normal"
+								required
+								fullWidth
+								name="aptDateTime"
+								id="datetime-local"
+								label="Next appointment"
+								type="datetime-local"
+								InputLabelProps={{
+									shrink: true,
+								}}
+								value={this.state.aptDateTime}
+								onChange={this.handleChange}
+							/>
+							<Button
+								type="submit"
+								fullWidth
+								variant="contained"
+								color="primary"
+								className={classes.submit}
+							>
+								Einen Termin vereinbaren
+							</Button>
+						</form>
+					</div>
+				</Container>
+				<Grid container spacing={2}>
+					<Grid item md={2} sm={0}></Grid>
+					<Grid item xs={12} md={8}>
+						<Grid container>
+							<Grid item xs={12}>
+								{appointments && appointments.length ? (
+									<Typography variant="h3" color="primary" gutterBottom>
+										Ihre Termine
+									</Typography>
+								) : null}
+							</Grid>
+							<Grid item xs={12}>
+								<TableContainer component={Paper}>
+									<Table className={classes.table} size="small" aria-label="a dense table">
+										{appointments && appointments.length ? (
+											<TableHead>
+												<TableRow>
+													<TableCell align="left">Das Thema</TableCell>
+													<TableCell align="left">Institution</TableCell>
+													<TableCell align="left">Datum & Zeit</TableCell>
+													<TableCell align="left">Cancel</TableCell>
+												</TableRow>
+											</TableHead>
+										) : null}
+										<TableBody>
+											{this.props.appointments && (
+												<AppointmentsList
+													userID={this.props.userID}
+													appointments={this.props.appointments}
+													deleteAppointment={this.props.deleteAppointment}
+												/>
+											)}
+										</TableBody>
+									</Table>
+								</TableContainer>
+							</Grid>
+						</Grid>
 					</Grid>
 					<Grid item md={2} sm={0}></Grid>
 				</Grid>
-				</>
+			</>
 		);
 	}
 }

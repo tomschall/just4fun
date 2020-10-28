@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import firebase from './Firebase';
 
 import Home from './pages/Home';
@@ -10,6 +10,7 @@ import Reviews from './pages/Reviews';
 import Appointments from './Appointments';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
+import PasswordReset from './PasswordReset';
 
 import Header from './ui/Header';
 import Footer from './ui/Footer';
@@ -19,7 +20,7 @@ import '../css/App.css';
 import { ThemeProvider } from '@material-ui/core';
 
 import theme from '../components/ui/Theme';
-import { navigate } from '@reach/router';
+//import { navigate } from '@reach/router';
 
 const db = firebase.firestore();
 
@@ -30,7 +31,7 @@ class App extends Component {
 			user: null,
 			displayName: null,
 			userID: null,
-			appointments: []
+			appointments: [],
 		};
 		this.addAppointment = this.addAppointment.bind(this);
 	}
@@ -43,25 +44,28 @@ class App extends Component {
 					displayName: FBUser.displayName,
 					userID: FBUser.uid,
 				});
-			
-				db.collection("appointments").get().then((querySnapshot) => {
-					let appointments = [];
-					querySnapshot.forEach((doc) => {
-							console.log(`${doc.id} =>`, doc.data());
-							appointments.push(doc.data())
-					});
-					this.setState({appointments});
-				});
 
-				db.collection("reviews").get().then((querySnapshot) => {
-					let reviews = [];
-					querySnapshot.forEach((doc) => {
+				db.collection('appointments')
+					.get()
+					.then((querySnapshot) => {
+						let appointments = [];
+						querySnapshot.forEach((doc) => {
 							console.log(`${doc.id} =>`, doc.data());
-							reviews.push(doc.data())
+							appointments.push({ ...doc.data(), id: doc.id });
+						});
+						this.setState({ appointments });
 					});
-					this.setState({reviews});
-				});
-				
+
+				db.collection('reviews')
+					.get()
+					.then((querySnapshot) => {
+						let reviews = [];
+						querySnapshot.forEach((doc) => {
+							console.log(`${doc.id} =>`, doc.data());
+							reviews.push(doc.data());
+						});
+						this.setState({ reviews });
+					});
 			} else {
 				this.setState({ user: null });
 			}
@@ -77,7 +81,8 @@ class App extends Component {
 					displayName: FBUser.displayName,
 					userID: FBUser.uid,
 				});
-				navigate('/welcome');
+				//navigate('/welcome');
+				this.props.history.push('/welcome');
 			});
 		});
 	};
@@ -94,13 +99,14 @@ class App extends Component {
 					userID: null,
 					user: null,
 				});
-				navigate('/');
+				//navigate('/');
+				this.props.history.push('/');
 			});
 	};
 
 	addAppointment = (tempApt) => {
-			db.collection('appointments')
-			.add( tempApt )
+		db.collection('appointments')
+			.add(tempApt)
 			.then(function (docRef) {
 				console.log('Document written with ID: ', docRef.id);
 			})
@@ -108,48 +114,63 @@ class App extends Component {
 				console.error('Error adding document: ', error);
 			});
 	};
+	deleteAppointment = (e, appId) => {
+		e.preventDefault();
+		db.collection('appointments')
+			.doc(appId)
+			.delete()
+			.then(() => {
+				this.setState((state) => ({
+					appointments: state.appointments.filter((app) => app.id !== appId),
+				}));
+			})
+			.catch(function (error) {
+				console.error('Error removing document: ', error);
+			});
+	};
 	addReveiw = (tempApt) => {
 		db.collection('appointments')
-		.add( tempApt )
-		.then(function (docRef) {
-			console.log('Document written with ID: ', docRef.id);
-		})
-		.catch(function (error) {
-			console.error('Error adding document: ', error);
-		});
-};
+			.add(tempApt)
+			.then(function (docRef) {
+				console.log('Document written with ID: ', docRef.id);
+			})
+			.catch(function (error) {
+				console.error('Error adding document: ', error);
+			});
+	};
 
 	render() {
 		return (
-			<Router>
-				<div className="layout-container">
-					<ThemeProvider theme={theme}>
-						<Header user={this.state.user} logOutUser={this.logOutUser} />
-						<div className="layout-content">
-							<Switch>
-								<Route exact path="/" component={Home} user={this.state.user} />
-								<Route path="/about" component={About} />
-								<Route path="/interpreting" component={TelephoneInterpreting} />
-								<Route path="/faq" component={Faq} />
-								<Route path="/reviews" component={Reviews} />
-								<Route path="/appointments">
-									<Appointments
-										appointments={this.state.appointments}
-										addAppointment={this.addAppointment}
-									/>
-								</Route>
+			<div className="layout-container">
+				<ThemeProvider theme={theme}>
+					<Header user={this.state.user} logOutUser={this.logOutUser} />
+					<div className="layout-content">
+						<Switch>
+							<Route exact path="/" component={Home} user={this.state.user} />
+							<Route path="/about" component={About} />
+							<Route path="/interpreting" component={TelephoneInterpreting} />
+							<Route path="/faq" component={Faq} />
+							<Route path="/reviews" component={Reviews} />
+							<Route path="/appointments">
+								<Appointments
+									appointments={this.state.appointments}
+									addAppointment={this.addAppointment}
+									userID={this.state.userID}
+									deleteAppointment={this.deleteAppointment}
+								/>
+							</Route>
 
-								<Route path="/signin" component={SignIn} />
-								<Route path="/signup" component={SignUp} registerUser={this.registerUser} />
-							</Switch>
-						</div>
-						<Footer />
-						<MobileFooter />
-					</ThemeProvider>
-				</div>
-			</Router>
+							<Route path="/signin" component={SignIn} />
+							<Route path="/password-reset" component={PasswordReset} />
+							<Route path="/signup" component={SignUp} registerUser={this.registerUser} />
+						</Switch>
+					</div>
+					<Footer />
+					<MobileFooter />
+				</ThemeProvider>
+			</div>
 		);
 	}
 }
 
-export default App;
+export default withRouter(App);

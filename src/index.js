@@ -5,6 +5,7 @@ import './css/index.css';
 import './style.css';
 import App from './components/App';
 import WebFont from 'webfontloader';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 WebFont.load({
 	google: {
@@ -13,7 +14,9 @@ WebFont.load({
 });
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<Router>
+			<App />
+		</Router>
 	</React.StrictMode>,
 	document.getElementById('root')
 );

@@ -17,7 +17,7 @@ import Container from '@material-ui/core/Container';
 
 import firebase from './Firebase';
 import FormError from './FormError';
-
+import messages from './messages';
 
 const styles = (theme) => ({
 	paper: {
@@ -79,7 +79,8 @@ class SignUp extends Component {
 			})
 			.catch((error) => {
 				if (error.message !== null) {
-					this.setState({ errorMessage: error.message });
+					let errorMessage = messages[error.code] || error.message;
+					this.setState({ errorMessage });
 				} else {
 					this.setState({ errorMessage: null });
 				}
