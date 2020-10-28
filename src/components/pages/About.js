@@ -41,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.down('md')]: {
 			margin: 'auto',
 			display: 'block',
-			width: '20em',
-			height: '20em',
+			width: '16em',
+			height: '16em',
 		},
   },
 }));
@@ -54,6 +54,7 @@ const aboutMeBodyText =
 function About() {
 	const classes = useStyles();
 	const theme = useTheme();
+	const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
 	return (
 		<div className={classes.root}>
@@ -62,7 +63,10 @@ function About() {
 				<Grid item item xs={12} md={8}>
 					<Grid container>
 						<Grid item xs={12}>
-							<Typography variant="h1" color="primary" gutterBottom>
+							<Typography
+								align={matchesXS ? 'center' : undefined} 
+								style={{fontSize: matchesXS ? '2.5rem' : null}}
+								variant="h1" color="primary" gutterBottom>
 									{aboutMeHeading}
 							</Typography></Grid>
 						<Grid item xs={12}>
