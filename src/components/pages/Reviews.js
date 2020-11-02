@@ -1,6 +1,5 @@
 import React from 'react';
-import { makeStyles, useTheme, Grid, Typography} from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles, useTheme, Grid, Typography, useMediaQuery} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -39,18 +38,18 @@ function Reviews() {
 		<div className={classes.root}>
 			<Grid container className={classes.mainContainer} >
 				<Grid item md={2} sm={0}></Grid>
-				<Grid item item xs={12} md={8}>
+				<Grid item xs={12} md={8}>
 					<Grid container>
 						<Grid item xs={12}>
-						<Typography
-						align={matchesXS ? 'center' : undefined} 
-						style={{fontSize: matchesXS ? '2.5rem' : null}}
-						variant="h1" color="primary" gutterBottom>
+							<Typography 
+							style={{fontSize: matchesXS ? '2rem' : null}}
+							variant="h1" color="primary" gutterBottom>
 									{reviewHeading}
-							</Typography></Grid>
+							</Typography>
+						</Grid>
 						<Grid item xs={12}>
 							<Grid container>
-								<Grid item item xs={12} md={12}>
+								<Grid item xs={12} md={12}>
 								<Typography variant="body1" gutterBottom>
 									{reviewBodyText}
 								</Typography>

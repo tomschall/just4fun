@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { Redirect } from 'react-router-dom';
 
 import firebase from './Firebase';
 import FormError from './FormError';
@@ -70,15 +66,16 @@ class SignUp extends Component {
 
 		firebase
 			.auth()
-			.createUserWithEmailAndPassword(
-				registrationInfo.email, 
-				registrationInfo.password
-			)
+			.createUserWithEmailAndPassword(registrationInfo.email, registrationInfo.password)
 			.then(() => {
-				this.props.registerUser(registrationInfo.firstName);
+				if (typeof this.props.registerUser === 'function') {
+					this.props.registerUser(registrationInfo.firstName);
+				}
+				this.props.history.push('/');
 			})
 			.catch((error) => {
 				if (error.message !== null) {
+					console.log('Firebase ERROR', error.code, error.message);
 					let errorMessage = messages[error.code] || error.message;
 					this.setState({ errorMessage });
 				} else {
@@ -88,7 +85,10 @@ class SignUp extends Component {
 	}
 
 	render() {
-		const { classes } = this.props;
+		const { classes, user } = this.props;
+		if (user) {
+			return <Redirect to="/" />;
+		}
 		return (
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
@@ -97,7 +97,7 @@ class SignUp extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
-					Registrieren
+						Registrieren
 					</Typography>
 					<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
 						{this.state.errorMessage !== null ? <FormError theMessage={this.state.errorMessage} /> : null}
@@ -122,7 +122,7 @@ class SignUp extends Component {
 									required
 									fullWidth
 									id="email"
-									label="Email Address"
+									label="Email Adresse"
 									name="email"
 									autoComplete="email"
 									value={this.state.email}
@@ -155,7 +155,7 @@ class SignUp extends Component {
 						</Button>
 						<Grid container justify="flex-end">
 							<Grid item>
-							{"Haben Sie berits ein Login? "}
+								{'Haben Sie berits ein Login? '}
 								<Link href="./signin" variant="body2">
 									Hier einloggen.
 								</Link>

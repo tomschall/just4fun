@@ -26,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.down('md')]: {
 			marginTop: '10em',
 		},
-		[theme.breakpoints.down('xs')]: {
-			marginTop: '10em',
-		},
 	},
 	homeLink: {
 		textDecoration: 'none',
@@ -43,19 +40,31 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-function Home() {
+function Home(props) {
 	const classes = useStyles();
+	const { user} = props;	
+	console.log('test user' + user);
 	return (
 		<div className={classes.root}>
 			<Grid  container direction="column" justify="center" alignItems="center" className={classes.mainContainer}>
 				<Grid  item >
-				<Link underline='none' href="./appointments" variant="body2">
-					<Paper className={classes.paper}>
-						<Typography variant="h2" >
-							Termin vereinbaren?
-						</Typography>
-					</Paper>
-					</Link>
+				{user ? (
+					<Link underline='none' href="./appointments" variant="body2">				
+						<Paper className={classes.paper}>
+							<Typography variant="h2" >
+								Termin vereinbaren?
+							</Typography>
+						</Paper>
+						</Link>
+					) : (
+						<Link underline='none' href="./signin" variant="body2">				
+							<Paper className={classes.paper}>
+								<Typography variant="h2" >
+									Termin vereinbaren?
+								</Typography>
+							</Paper>
+						</Link>
+						)}
 				</Grid>
 			</Grid>
 		</div>

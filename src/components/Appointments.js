@@ -33,10 +33,19 @@ const styles = (theme) => ({
 	},
 	submit: {
 		margin: theme.spacing(3, 0, 2),
+		'&:hover': {
+			color: 'white',
+		}
 	},
 	table: {
 		minWidth: 650,
 	},
+	tableHead:{
+		fontWeight: 700,
+	},
+	tablePadding: {
+		padding: '16px',
+	}
 });
 
 class Appointments extends Component {
@@ -71,7 +80,7 @@ class Appointments extends Component {
 			aptDateTime: this.state.aptDateTime,
 		};
 		if (!tempApt.thema || !tempApt.institution || !tempApt.aptDateTime) {
-			let errorMessage = messages['empty-fields'] || 'Please fill all the fields';
+			let errorMessage = messages['empty-fields'] || 'Bitte füllen Sie alle Felder aus';
 			this.setState({ errorMessage });
 			return;
 		}
@@ -125,7 +134,7 @@ class Appointments extends Component {
 								fullWidth
 								name="aptDateTime"
 								id="datetime-local"
-								label="Next appointment"
+								label="Nächster Termin"
 								type="datetime-local"
 								InputLabelProps={{
 									shrink: true,
@@ -145,27 +154,27 @@ class Appointments extends Component {
 						</form>
 					</div>
 				</Container>
-				<Grid container spacing={2}>
+				<Grid container>
 					<Grid item md={2} sm={0}></Grid>
-					<Grid item xs={12} md={8}>
+					<Grid item xs={12} md={8} className={classes.tablePadding}>
 						<Grid container>
-							<Grid item xs={12}>
+							<Grid item xs={12} className={classes.mobileMargin}>
 								{appointments && appointments.length ? (
 									<Typography variant="h3" color="primary" gutterBottom>
 										Ihre Termine
 									</Typography>
 								) : null}
 							</Grid>
-							<Grid item xs={12}>
+							<Grid item xs={12} className={classes.mobileMargin}>
 								<TableContainer component={Paper}>
 									<Table className={classes.table} size="small" aria-label="a dense table">
 										{appointments && appointments.length ? (
 											<TableHead>
 												<TableRow>
-													<TableCell align="left">Das Thema</TableCell>
-													<TableCell align="left">Institution</TableCell>
-													<TableCell align="left">Datum & Zeit</TableCell>
-													<TableCell align="left">Cancel</TableCell>
+													<TableCell classes={{root:classes.tableHead}} align="left">Das Thema</TableCell>
+													<TableCell classes={{root:classes.tableHead}} align="left">Institution</TableCell>
+													<TableCell classes={{root:classes.tableHead}} align="left">Datum & Zeit</TableCell>
+													<TableCell classes={{root:classes.tableHead}} align="left">Cancel</TableCell>
 												</TableRow>
 											</TableHead>
 										) : null}

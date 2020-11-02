@@ -20,6 +20,7 @@ import '../css/App.css';
 import { ThemeProvider } from '@material-ui/core';
 
 import theme from '../components/ui/Theme';
+import { Email } from '@material-ui/icons';
 //import { navigate } from '@reach/router';
 
 const db = firebase.firestore();
@@ -146,7 +147,7 @@ class App extends Component {
 					<Header user={this.state.user} logOutUser={this.logOutUser} />
 					<div className="layout-content">
 						<Switch>
-							<Route exact path="/" component={Home} user={this.state.user} />
+							<Route exact path="/" component={() =><Home user={this.state.user}/>}/>
 							<Route path="/about" component={About} />
 							<Route path="/interpreting" component={TelephoneInterpreting} />
 							<Route path="/faq" component={Faq} />
@@ -162,11 +163,13 @@ class App extends Component {
 
 							<Route path="/signin" component={SignIn} />
 							<Route path="/password-reset" component={PasswordReset} />
-							<Route path="/signup" component={SignUp} registerUser={this.registerUser} />
+							<Route path="/signup" >
+								<SignUp user={this.state.user} />
+							</Route>
 						</Switch>
 					</div>
 					<Footer />
-					<MobileFooter />
+					<MobileFooter user={this.state.user} logOutUser={this.logOutUser} />
 				</ThemeProvider>
 			</div>
 		);

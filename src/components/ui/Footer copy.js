@@ -3,7 +3,7 @@ import { makeStyles, Typography, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 import { Link } from '@reach/router';
 
-import footerImg from '../../assets/footer-part3.png';
+import footerTlet from '../../assets/footer4.png';
 
 function Copyright() {
   return (
@@ -21,13 +21,13 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
 	footer: {
-		backgroundImage: `url(${footerImg})`,
-		backgroundRepeat: 'repeat-x',
+		backgroundColor: theme.palette.common.green,
+		color: 'black',
+		fontSize: '0.75rem',
 		width: '100%',
-		height: '4em',
-		[theme.breakpoints.down('md')]: {
-			display: 'none'
-		},
+		zIndex: 1302,
+		position: 'relative',
+		overflow: 'hidden',
 	},
 	link: {
 		color: 'white',
@@ -45,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	tilet: {
+		//width: '60em',
+		marginLeft: '-25px',
+		marginBottom: '-12px',
+		marginTop: '-8px',
+		verticalAlign: 'bottom',
 		[theme.breakpoints.down('lg')]: {			
 			height: '6em',
 			backgroundRepeat: 'repeat-x'
@@ -88,6 +93,7 @@ export default function Footer() {
 					</Grid>
 				</Grid>
 			</Grid> */}
+			<img alt="habesch decorative tilet" src={footerTlet} className={classes.tilet} />
 		</footer>
 	);
 }

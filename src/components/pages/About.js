@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import me from '../../img/me.png';
+import me from '../../assets/me.png';
 import Grid from '@material-ui/core/Grid';
 import { Typography, useMediaQuery } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
@@ -36,13 +35,12 @@ const useStyles = makeStyles((theme) => ({
 		maxHeight: '100%',
 	},
 	large: {
-    width: '25em',
-		height: '25em',
-		[theme.breakpoints.down('md')]: {
+    width: '90%',
+  	height: 'auto',
+		[theme.breakpoints.down('sm')]: {
 			margin: 'auto',
 			display: 'block',
-			width: '16em',
-			height: '16em',
+			width: '60%',
 		},
   },
 }));
@@ -60,23 +58,23 @@ function About() {
 		<div className={classes.root}>
 			<Grid container className={classes.mainContainer} >
 				<Grid item md={2} sm={0}></Grid>
-				<Grid item item xs={12} md={8}>
+				<Grid item xs={12} md={8}>
 					<Grid container>
 						<Grid item xs={12}>
-							<Typography
-								align={matchesXS ? 'center' : undefined} 
-								style={{fontSize: matchesXS ? '2.5rem' : null}}
-								variant="h1" color="primary" gutterBottom>
+							<Typography 
+							style={{fontSize: matchesXS ? '2rem' : null}}
+							variant="h1" color="primary" gutterBottom>
 									{aboutMeHeading}
-							</Typography></Grid>
+							</Typography>
+						</Grid>
 						<Grid item xs={12}>
 							<Grid container spacing={4}>
-								<Grid item item xs={12} md={6}>
+								<Grid item xs={12} md={6}>
 								<Typography variant="body1" gutterBottom>
 									{aboutMeBodyText}
 								</Typography>
 								</Grid>
-								<Grid item item xs={12} md={6}>
+								<Grid item xs={12} md={6}>
 								<Avatar alt="Nigsty Abreha" src={me} className={classes.large} />
 								</Grid>
 								{/* <Grid item item xs={12} md={6}><img src={me} alt="Nigsty" className={classes.imgStyle} /></Grid> */}

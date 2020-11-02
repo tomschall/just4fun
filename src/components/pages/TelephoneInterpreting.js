@@ -43,23 +43,22 @@ function TelephoneInterpreting() {
 		<div className={classes.root}>
 		<Grid container className={classes.mainContainer} >
 			<Grid item md={2} sm={0}></Grid>
-			<Grid item item xs={12} md={8}>
+			<Grid item xs={12} md={8}>
 				<Grid container>
 					<Grid item xs={12}>
-						<Typography
-						align={matchesXS ? 'center' : undefined} 
-						style={{fontSize: matchesXS ? '2.5rem' : null}}
-						variant="h1" color="primary" gutterBottom>
+					<Typography 
+							style={{fontSize: matchesXS ? '2rem' : null}}
+							variant="h1" color="primary" gutterBottom>
 						{interpretHeading}
 						</Typography></Grid>
 					<Grid item xs={12}>
 						<Grid container spacing={4}>
-							<Grid item item xs={12} md={6}>
+							<Grid item xs={12} md={6}>
 							<Typography variant="body1" gutterBottom>
 								{interpretBodyText}
 							</Typography>
 							</Grid>
-							<Grid item item xs={12} md={6}>
+							<Grid item xs={12} md={6}>
 								<Typography variant="body1" gutterBottom>
 									{interpretBodyText}
 								</Typography>

@@ -34,22 +34,41 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function MobileFooter() {
+export default function MobileFooter(props) {
 	const classes = useStyles();
 
+	const { user, logOutUser } = props;
 	return (
 		<footer className={classes.mobileFooter}>
 		<Grid  container direction="column" justify="center" alignItems="center" >
 			<Grid item >
-				<Button component={Link} to={'/signin'} className={classes.buttonCenter} >
+				{user ? (
+				<Button 
+					variant="contained" 
+					color="secondary" 
+					onClick={logOutUser}
+					>
 					<AccountCircleIcon />
-				</Button>				
+					Logout 
+				</Button>
+			) : (
+				<Button
+					component={Link}
+					to={'/signin'}
+					variant="contained"
+					color="secondary"
+					className={classes.button}
+				>
+					<AccountCircleIcon />
+					Login
+				</Button>
+			)}			
 			</Grid>
-			<Grid item>
+		{/* 	<Grid item>
 				<Typography variant="body2">
 					Login
 				</Typography>
-			</Grid>
+			</Grid> */}
 		</Grid>
 	
 		</footer>

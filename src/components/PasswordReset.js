@@ -42,7 +42,6 @@ class PasswordReset extends Component {
 		super(props);
 		this.state = {
 			email: '',
-			password: '',
 			errorMessage: null,
 		};
 
@@ -60,16 +59,17 @@ class PasswordReset extends Component {
 	handleSubmit(e) {
 		var registrationInfo = {
 			email: this.state.email,
-			password: this.state.password,
 		};
 		e.preventDefault();
 
+		firebase.auth().languageCode = 'de';
+
 		firebase
 			.auth()
-			.signInWithEmailAndPassword(registrationInfo.email, registrationInfo.password)
+			.sendPasswordResetEmail(registrationInfo.email)
 			.then(() => {
 				//	navigate(//'./appointments');
-				this.props.history.push('/appointments');
+				this.props.history.push('/signin');
 			})
 			.catch((error) => {
 				console.log('Firebase Error:', error.code, error);
@@ -102,7 +102,7 @@ class PasswordReset extends Component {
 							required
 							fullWidth
 							id="email"
-							label="Email Address"
+							label="Email Adresse"
 							name="email"
 							autoComplete="email"
 							autoFocus
@@ -111,7 +111,7 @@ class PasswordReset extends Component {
 						/>
 						{/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
 						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-							Anmelden
+							Email senden
 						</Button>
 						<Grid container>
 							<Grid item>

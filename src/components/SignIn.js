@@ -129,7 +129,7 @@ class SignIn extends Component {
 						<Grid container>
 							<Grid item xs>
 								<Link href="./password-reset" variant="body2">
-									Forgot password?
+									Passwort vergessen?
 								</Link>
 							</Grid>
 							<Grid item>

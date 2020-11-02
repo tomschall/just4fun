@@ -15,10 +15,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Welcome from '../Welcome';
-import humberger from '../../assets/humberger2.png';
 
 import logo from '../../assets/habescha-web-interpret-logo.svg';
+import hamburger from '../../assets/hamburger.svg';
 
 function ElevationScroll(props) {
 	const { children } = props;
@@ -81,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
 		color: 'white',
 	},
 	drawerIcon: {
-		height: '50px',
-		width: '50px',
+		height: '40px',
+		width: '40px',
 		color: theme.palette.common.green,
 	},
 	drawerIconContainer: {
@@ -102,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
 		color: theme.palette.common.green,
 		opacity: 0.8,
 	},
-	drawerItmeLogin: {
+	drawerItemTermin: {
 		backgroundColor: theme.palette.common.red,
 	},
 	drawerItemSelected: {
@@ -232,14 +231,14 @@ export default function Header(props) {
 						button
 						component={Link}
 						classes={{
-							root: classes.drawerItmeLogin,
+							root: classes.drawerItemTermin,
 							selected: classes.drawerItemSelected,
 						}}
-						to="/signin"
+						to="/appointments"
 						selected={value === 5}
 					>
 						<ListItemText className={classes.drawerItem} disableTypography>
-							Login
+						Termin vereinbaren?
 						</ListItemText>
 					</ListItem>
 				</List>
@@ -249,7 +248,8 @@ export default function Header(props) {
 				onClick={() => setOpenDrawer(!openDrawer)}
 				disableRipple
 			>
-				<MenuIcon className={classes.drawerIcon} />
+				{/* <MenuIcon className={classes.drawerIcon} /> */}
+				<img src={hamburger} className={classes.drawerIcon} />
 			</IconButton>
 		</React.Fragment>
 	);

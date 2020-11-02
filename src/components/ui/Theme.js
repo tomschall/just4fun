@@ -26,17 +26,19 @@ const theme =  createMuiTheme({
 			fontSize: '1rem',
 		},
 		h1: {
-			fontSize: '3rem',
+			fontSize: '2.5rem',
+			fontWeight: 500,
 		},
 		h2: {
-			fontSize: '2.5rem',
+			fontSize: '2rem',
 		},
 		h3: {
 			fontSize: '1.5rem',
 		},
 		body1: {
-			fontSize: '1.3rem',
-			color: '#4a4a4a'
+			fontSize: '1.2rem',
+			color: '#4a4a4a',
+			textAlign: 'justify'
 		},
 		body2: {
 			color: '#272727',
@@ -46,7 +48,10 @@ const theme =  createMuiTheme({
 
 theme.props = {
 	MuiButton: {
-		disableElevation: true
+		disableElevation: true,
+		'&:hover': {
+			color: 'red',
+		}
 	},
 	MuiInputLable: {
 		//shrink: true
@@ -59,8 +64,10 @@ theme.props = {
 theme.overrides = {
 	MuiButton: {
 		root: {
-
+		'&:hover': {
+			color: 'white',
 		}
+		},		
 	},
 	MuiInput: {
 		root: {
@@ -68,12 +75,27 @@ theme.overrides = {
 			border: `1px solid $(grey[500])`,
 			padding: theme.spacing(1)
 		},
+		button: {
+			'&:hover': {
+				color: 'red',
+			}
+		}
 
 	},
 	MuiInputLable: {
 		root: {
 			textTransform: 'uppercase',
 			fontSize: '1.5rem'
+		}
+	},
+	
+	MuiLink: {
+		underlineHover: {
+			'&:hover':{
+				textDecoration: 'none',
+				color: 'red'
+			}
+
 		}
 	}
 }
