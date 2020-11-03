@@ -66,7 +66,9 @@ class SignUp extends Component {
 
 		firebase
 			.auth()
-			.createUserWithEmailAndPassword(registrationInfo.email, registrationInfo.password)
+			.createUserWithEmailAndPassword(
+					registrationInfo.email, 
+					registrationInfo.password)
 			.then(() => {
 				if (typeof this.props.registerUser === 'function') {
 					this.props.registerUser(registrationInfo.firstName);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
+import firebase from './Firebase';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -78,6 +79,8 @@ class Appointments extends Component {
 			institution: this.state.institution,
 			//aptDateTime: new Date(this.state.aptDateTime),
 			aptDateTime: this.state.aptDateTime,
+			email: firebase.auth().currentUser.email,
+			uid: firebase.auth().currentUser.uid,
 		};
 		if (!tempApt.thema || !tempApt.institution || !tempApt.aptDateTime) {
 			let errorMessage = messages['empty-fields'] || 'Bitte füllen Sie alle Felder aus';

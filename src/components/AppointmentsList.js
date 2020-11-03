@@ -12,8 +12,6 @@ const db = firebase.firestore();
 
 class AppointmentsList extends Component {
 
-
-
 	render() {
 		const { appointments } = this.props;
 		const myAppointments = appointments.map((item) => {

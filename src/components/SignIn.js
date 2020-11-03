@@ -66,7 +66,10 @@ class SignIn extends Component {
 
 		firebase
 			.auth()
-			.signInWithEmailAndPassword(registrationInfo.email, registrationInfo.password)
+			.signInWithEmailAndPassword(
+					registrationInfo.email, 
+					registrationInfo.password
+					)
 			.then(() => {
 				//navigate('./appointments');
 				this.props.history.push('/appointments')

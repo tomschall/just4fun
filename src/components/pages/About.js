@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.down('sm')]: {
 			margin: 'auto',
 			display: 'block',
-			width: '60%',
+			width: '80%',
 		},
   },
 }));

@@ -11,7 +11,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -114,9 +113,9 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: 'white',
 		color: theme.palette.common.green,
 	},
-	testClasse:{
+	testClasse: {
 		backgroundColor: theme.palette.common.red,
-	}
+	},
 }));
 
 export default function Header(props) {
@@ -158,7 +157,13 @@ export default function Header(props) {
 
 	const tabs = (
 		<React.Fragment>
-			<Tabs value={value} onChange={handleChange} className={classes.tabContainer} indicatorColor="primary" classes={{indicator: classes.testClasse}}>
+			<Tabs
+				value={value}
+				onChange={handleChange}
+				className={classes.tabContainer}
+				indicatorColor="primary"
+				classes={{ indicator: classes.testClasse }}
+			>
 				{routes.map((route, index) => (
 					<Tab
 						key={`${route}${index}`}
@@ -170,13 +175,8 @@ export default function Header(props) {
 				))}
 			</Tabs>
 			{user ? (
-				<Button 
-					variant="contained" 
-					color="secondary" 
-					className={classes.button} 
-					onClick={logOutUser}
-					>
-					Logout 
+				<Button variant="contained" color="secondary" className={classes.button} onClick={logOutUser}>
+					Logout
 				</Button>
 			) : (
 				<Button
@@ -238,7 +238,7 @@ export default function Header(props) {
 						selected={value === 5}
 					>
 						<ListItemText className={classes.drawerItem} disableTypography>
-						Termin vereinbaren?
+							Termin vereinbaren?
 						</ListItemText>
 					</ListItem>
 				</List>
