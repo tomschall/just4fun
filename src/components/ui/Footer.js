@@ -3,7 +3,7 @@ import { makeStyles, Typography, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 import { Link } from '@reach/router';
 
-import footerImg from '../../assets/footer-part3.png';
+import footerImg from '../../assets/footer-part2.png';
 
 function Copyright() {
   return (
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 		backgroundImage: `url(${footerImg})`,
 		backgroundRepeat: 'repeat-x',
 		width: '100%',
-		height: '4em',
+		height: '1.8em',
 		[theme.breakpoints.down('md')]: {
 			display: 'none'
 		},

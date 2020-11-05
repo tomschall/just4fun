@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	logoContainer: {
 		paddingLeft: '4em',
-		[theme.breakpoints.down('xs')]: {
+		[theme.breakpoints.down('md')]: {
 			paddingLeft: '1em',
 		},
 		'&hover': {
@@ -133,27 +133,27 @@ export default function Header(props) {
 		setValue(value);
 	};
 
-	useEffect(() => {
-		if (window.location.pathname === '/' && value !== 0) {
-			setValue(0);
-		} else if (window.location.pathname === '/about' && value !== 1) {
-			setValue(1);
-		} else if (window.location.pathname === '/interpreting' && value !== 2) {
-			setValue(2);
-		} else if (window.location.pathname === '/faq' && value !== 3) {
-			setValue(3);
-		} else if (window.location.pathname === '/reviews' && value !== 4) {
-			setValue(4);
-		}
-	}, [value]);
+useEffect(() => {
+	if (window.location.pathname === '/' && value !== 0) {
+		setValue(0);
+	} else if (window.location.pathname === '/interpreting' && value !== 1) {
+		setValue(1);
+	} else if (window.location.pathname === '/reviews' && value !== 2) {
+		setValue(2);
+	} else if (window.location.pathname === '/faq' && value !== 3) {
+		setValue(3);
+	} else if (window.location.pathname === '/about' && value !== 4) {
+		setValue(4);
+	}
+}, [value]);
 
-	const routes = [
-		{ name: 'Home', link: '/', activeIndex: 0 },
-		{ name: 'Über mich', link: '/about', activeIndex: 1 },
-		{ name: 'Telephonedolmetschen', link: '/interpreting', activeIndex: 2 },
-		{ name: 'FAQ', link: '/faq', activeIndex: 3 },
-		{ name: 'Kundenbewertungen', link: '/reviews', activeIndex: 4 },
-	];
+const routes = [
+	{ name: 'Home', link: '/', activeIndex: 0 },
+	{ name: 'Telephonedolmetschen', link: '/interpreting', activeIndex: 1 },
+	{ name: 'Kundenbewertungen', link: '/reviews', activeIndex: 2 },
+	{ name: 'FAQ', link: '/faq', activeIndex: 3 },		
+	{ name: 'Über mich', link: '/about', activeIndex: 4 },
+];
 
 	const tabs = (
 		<React.Fragment>

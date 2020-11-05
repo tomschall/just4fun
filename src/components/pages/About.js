@@ -35,13 +35,14 @@ const useStyles = makeStyles((theme) => ({
 		maxHeight: '100%',
 	},
 	large: {
-    width: '90%',
-  	height: 'auto',
-		[theme.breakpoints.down('sm')]: {
+    width: '80%',
+		height: 'auto',
+		[theme.breakpoints.down('md')]: {
 			margin: 'auto',
 			display: 'block',
 			width: '80%',
 		},
+	
   },
 }));
 
@@ -57,8 +58,8 @@ function About() {
 	return (
 		<div className={classes.root}>
 			<Grid container className={classes.mainContainer} >
-				<Grid item md={2} sm={0}></Grid>
-				<Grid item xs={12} md={8}>
+				<Grid item lg={2} md={0} sm={0}></Grid>
+				<Grid item xs={12} md={12} lg={8}>
 					<Grid container>
 						<Grid item xs={12}>
 							<Typography 
@@ -82,7 +83,7 @@ function About() {
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item md={2} sm={0}></Grid>
+				<Grid item lg={2} md={0} sm={0}/>
 			</Grid>
 			<div className={classes.toolbarMargin} />
 		</div>

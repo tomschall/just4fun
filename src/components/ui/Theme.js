@@ -64,9 +64,7 @@ theme.props = {
 theme.overrides = {
 	MuiButton: {
 		root: {
-		'&:hover': {
-			color: 'white',
-		}
+			color: 'green',
 		},		
 	},
 	MuiInput: {

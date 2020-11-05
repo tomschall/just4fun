@@ -42,15 +42,16 @@ function TelephoneInterpreting() {
 	return (
 		<div className={classes.root}>
 		<Grid container className={classes.mainContainer} >
-			<Grid item md={2} sm={0}></Grid>
-			<Grid item xs={12} md={8}>
+			<Grid item lg={2} md={0} sm={0}></Grid>
+			<Grid item xs={12} md={12} lg={8}>
 				<Grid container>
 					<Grid item xs={12}>
-					<Typography 
-							style={{fontSize: matchesXS ? '2rem' : null}}
-							variant="h1" color="primary" gutterBottom>
-						{interpretHeading}
-						</Typography></Grid>
+						<Typography 
+								style={{fontSize: matchesXS ? '2rem' : null}}
+								variant="h1" color="primary" gutterBottom>
+							{interpretHeading}
+							</Typography>
+						</Grid>
 					<Grid item xs={12}>
 						<Grid container spacing={4}>
 							<Grid item xs={12} md={6}>
@@ -67,7 +68,7 @@ function TelephoneInterpreting() {
 					</Grid>
 				</Grid>
 			</Grid>
-			<Grid item md={2} sm={0}></Grid>
+			<Grid item lg={2} md={0} sm={0}></Grid>
 		</Grid>
 		<div className={classes.toolbarMargin} />
 	</div>

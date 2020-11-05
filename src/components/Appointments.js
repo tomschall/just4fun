@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {useState, useEffect, Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
 import firebase from './Firebase';
@@ -46,7 +46,10 @@ const styles = (theme) => ({
 	},
 	tablePadding: {
 		padding: '16px',
-	}
+	},
+	errorIcon: {
+		color: 'red',
+	},
 });
 
 class Appointments extends Component {
@@ -177,7 +180,8 @@ class Appointments extends Component {
 													<TableCell classes={{root:classes.tableHead}} align="left">Das Thema</TableCell>
 													<TableCell classes={{root:classes.tableHead}} align="left">Institution</TableCell>
 													<TableCell classes={{root:classes.tableHead}} align="left">Datum & Zeit</TableCell>
-													<TableCell classes={{root:classes.tableHead}} align="left">Cancel</TableCell>
+													<TableCell classes={{root:classes.tableHead}} align="left">Bearbeiten</TableCell>
+													<TableCell classes={{root:classes.tableHead}} align="left">Löschen</TableCell>
 												</TableRow>
 											</TableHead>
 										) : null}
