@@ -11,7 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import firebase from './Firebase';
+import firebase from '../services/Firebase';
 import FormError from './FormError';
 //import { navigate } from '@reach/router';
 

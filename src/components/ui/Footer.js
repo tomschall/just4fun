@@ -1,6 +1,5 @@
 import React from 'react';
-import { makeStyles, Typography, Grid } from '@material-ui/core';
-import { useTheme } from '@material-ui/styles';
+import { makeStyles, Typography} from '@material-ui/core';
 import { Link } from '@reach/router';
 
 import footerImg from '../../assets/footer-part2.png';

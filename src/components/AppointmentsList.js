@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Moment from 'react-moment';
-import firebase from './Firebase';
+import firebase from '../services/Firebase';
 
 
 const db = firebase.firestore();

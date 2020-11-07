@@ -11,9 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom';
 
-import firebase from './Firebase';
+import { registerUser } from '../services/Firebase';
 import FormError from './FormError';
-import messages from './messages';
 
 const styles = (theme) => ({
 	paper: {
@@ -64,26 +63,7 @@ class SignUp extends Component {
 		};
 		e.preventDefault();
 
-		firebase
-			.auth()
-			.createUserWithEmailAndPassword(
-					registrationInfo.email, 
-					registrationInfo.password)
-			.then(() => {
-				if (typeof this.props.registerUser === 'function') {
-					this.props.registerUser(registrationInfo.firstName);
-				}
-				this.props.history.push('/');
-			})
-			.catch((error) => {
-				if (error.message !== null) {
-					console.log('Firebase ERROR', error.code, error.message);
-					let errorMessage = messages[error.code] || error.message;
-					this.setState({ errorMessage });
-				} else {
-					this.setState({ errorMessage: null });
-				}
-			});
+		registerUser(registrationInfo)
 	}
 
 	render() {

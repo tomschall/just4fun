@@ -1,6 +1,5 @@
 import React from 'react';
-import { makeStyles, Typography, Grid } from '@material-ui/core';
-import { useTheme } from '@material-ui/styles';
+import { makeStyles, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
