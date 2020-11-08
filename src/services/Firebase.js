@@ -34,14 +34,42 @@ export const getAppointments = async () => {
 	return appointments;
 };
 
+export const addAppointmentNew = (tempApt) => {
+	return db.collection('appointments')
+				.add(tempApt)
+};
+
+export const deleteAppointmentNew = (e, appId) => {
+	return	db.collection('appointments')
+					.doc(appId)
+					.delete()
+};
+
 export const getReviews = async () => {
 	const querySnapshot = await db.collection('appointments').get();
 	let reviews = [];
 	querySnapshot.forEach((doc) => {
 		reviews.push({ ...doc.data(), id: doc.id });
 	});
-
 	return reviews;
 };
 
+
+export const signInUser = (registrationInfo) => {
+	return firebase
+				.auth()
+				.signInWithEmailAndPassword(
+					registrationInfo.email, 
+					registrationInfo.password
+					)
+};
+
+export const signUpUser = (registrationInfo) =>{
+	return firebase
+				.auth()
+				.createUserWithEmailAndPassword(
+						registrationInfo.email, 
+						registrationInfo.password
+						)
+};
 export default firebase;
