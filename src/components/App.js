@@ -40,7 +40,8 @@ class App extends Component {
 					userID: FBUser.uid,
 				});
 
-				await this.readAppointments();
+				const appointments = await getAppointments();
+				this.setState({ appointments });
 
 				const reviews = await getReviews();
 				this.setState({ reviews });
@@ -49,11 +50,6 @@ class App extends Component {
 			}
 		});
 	}
-
-	readAppointments = async () => {
-		const appointments = await getAppointments();
-		this.setState({ appointments });
-	};
 
 	logOutUser = (e) => {
 		e.preventDefault();
@@ -70,7 +66,18 @@ class App extends Component {
 			});
 	};
 
-		deleteAppointment = (e, appId) => {
+	addAppointment = (tempApt) => {
+		db.collection('appointments')
+			.add(tempApt)
+			.then(function (docRef) {
+				console.log('Document written with ID: ', docRef.id);
+			})
+			.catch(function (error) {
+				console.error('Error adding document: ', error);
+			});
+	};
+
+	deleteAppointment = (e, appId) => {
 		e.preventDefault();
 		db.collection('appointments')
 			.doc(appId)
@@ -110,7 +117,7 @@ class App extends Component {
 							<Route path="/appointments">
 								<Appointments
 									appointments={this.state.appointments}
-									readAppointments={this.readAppointments}
+									addAppointment={this.addAppointment}
 									userID={this.state.userID}
 									deleteAppointment={this.deleteAppointment}
 								/>

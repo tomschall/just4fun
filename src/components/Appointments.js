@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
-import { auth, addAppointment } from '../services/Firebase';
+import { auth } from '../services/Firebase';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -90,12 +90,7 @@ class Appointments extends Component {
 			this.setState({ errorMessage });
 			return;
 		}
-		try{
-		await addAppointment(tempApt);
-		}catch(error){
-			console.log('error', error)
-		}
-		this.props.readAppointments();
+		this.props.addAppointment(tempApt);
 		this.setState({ thema: '', institution: '' });
 	};
 	render() {
