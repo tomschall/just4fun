@@ -4,7 +4,8 @@ import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		flexGrow: 1
+		flexGrow: 1,
+		height: '60vh'
 	},
 	paper: {
 		textAlign: 'center',
@@ -22,10 +23,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	mainContainer: {
-		marginTop: '10em',
-		[theme.breakpoints.down('md')]: {
-			marginTop: '10em',
-		},
+		height: '100%',
 	},
 	homeLink: {
 		textDecoration: 'none',

@@ -29,7 +29,9 @@ function ElevationScroll(props) {
 	return React.cloneElement(children, {
 		elevation: trigger ? 4 : 0,
 	});
-}
+};
+
+
 
 const useStyles = makeStyles((theme) => ({
 	toolbarMargin: {
@@ -133,19 +135,16 @@ export default function Header(props) {
 		setValue(value);
 	};
 
-useEffect(() => {
-	if (window.location.pathname === '/' && value !== 0) {
-		setValue(0);
-	} else if (window.location.pathname === '/interpreting' && value !== 1) {
-		setValue(1);
-	} else if (window.location.pathname === '/reviews' && value !== 2) {
-		setValue(2);
-	} else if (window.location.pathname === '/faq' && value !== 3) {
-		setValue(3);
-	} else if (window.location.pathname === '/about' && value !== 4) {
-		setValue(4);
-	}
-}, [value]);
+	const activeIndex = () => {
+    const found = routes.indexOf(
+      routes.filter(
+        ({ name, link }) =>
+          link === window.location.pathname
+      )[0]
+    )
+
+    return found === -1 ? false : found
+  }
 
 const routes = [
 	{ name: 'Home', link: '/', activeIndex: 0 },
@@ -158,7 +157,7 @@ const routes = [
 	const tabs = (
 		<React.Fragment>
 			<Tabs
-				value={value}
+				value={activeIndex()}
 				onChange={handleChange}
 				className={classes.tabContainer}
 				indicatorColor="primary"

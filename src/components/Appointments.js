@@ -21,6 +21,9 @@ import FormError from './FormError';
 import AppointmentsList from './AppointmentsList';
 import messages from './messages';
 
+import DateFnsUtils from '@date-io/date-fns'; 
+import { DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+
 const styles = (theme) => ({
 	paper: {
 		marginTop: theme.spacing(8),
@@ -58,18 +61,23 @@ class Appointments extends Component {
 		this.state = {
 			thema: '',
 			institution: '',
-			aptDateTime: '',
+			aptDateTime: new Date(),
 			errorMessage: null,
 		};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleDateChange = this.handleDateChange.bind(this);
 	}
 
+	handleDateChange(newDate){
+		this.setState({
+			aptDateTime: newDate
+		})
+	}
 	handleChange(e) {
 		const itemName = e.target.name;
 		const itemValue = e.target.value;
-
 		this.setState({
 			[itemName]: itemValue,
 		});
@@ -85,6 +93,7 @@ class Appointments extends Component {
 			email: auth.currentUser.email,
 			uid: auth.currentUser.uid,
 		};
+		console.log('Test date and time', tempApt.aptDateTime);
 		if (!tempApt.thema || !tempApt.institution || !tempApt.aptDateTime) {
 			let errorMessage = messages['empty-fields'] || 'Bitte füllen Sie alle Felder aus';
 			this.setState({ errorMessage });
@@ -96,7 +105,7 @@ class Appointments extends Component {
 	render() {
 		const { classes, appointments } = this.props;
 		return (
-			<>
+			<MuiPickersUtilsProvider utils={DateFnsUtils}>
 				<Container component="main" maxWidth="xs">
 					<CssBaseline />
 					<div className={classes.paper}>
@@ -132,20 +141,19 @@ class Appointments extends Component {
 								value={this.state.institution}
 								onChange={this.handleChange}
 							/>
-							<TextField
-								variant="outlined"
+							<DateTimePicker
+								variant="inline"
 								margin="normal"
 								required
 								fullWidth
 								name="aptDateTime"
 								id="datetime-local"
-								label="Nächster Termin"
-								type="datetime-local"
+								emptyLabel="Nächster Termin"
 								InputLabelProps={{
 									shrink: true,
 								}}
 								value={this.state.aptDateTime}
-								onChange={this.handleChange}
+								onChange={this.handleDateChange}
 							/>
 							<Button
 								type="submit"
@@ -210,7 +218,7 @@ class Appointments extends Component {
 					</Grid>
 					<Grid item lg={2} md={0} sm={0}/>
 				</Grid>
-			</>
+			</MuiPickersUtilsProvider>
 		);
 	}
 }

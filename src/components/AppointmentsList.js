@@ -16,16 +16,12 @@ class AppointmentsList extends Component {
 	render() {
 		const { appointments } = this.props;
 		const myAppointments = appointments.map((item) => {
+      console.log('the item', item);
 			return (
         <TableRow key={item.id}>					
           <TableCell align="left">{item.thema}</TableCell>
           <TableCell align="left">{item.institution}</TableCell>
-          <TableCell align="left">
-          <Moment 
-                date = {item.aptDateTime}
-                format="DD.MM.YYYY hh:mm"
-             />
-          </TableCell>
+          <TableCell align="left"></TableCell>
           <TableCell align="left">
             <Button 
               title="Termin bearbeiten"
