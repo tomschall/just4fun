@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
-import { auth } from '../services/Firebase';
+import { auth, deleteAppointment, addAppointment } from '../services/Firebase';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -99,9 +99,17 @@ class Appointments extends Component {
 			this.setState({ errorMessage });
 			return;
 		}
-		this.props.addAppointment(tempApt);
-		this.setState({ thema: '', institution: '' });
+		try {
+			const docRef= await addAppointment(tempApt);
+			console.log('Document written with ID: ', docRef.id);
+			this.props.readAppointments();
+			this.setState({ thema: '', institution: '' });
+		}
+		catch(error) {
+			console.error('Error adding document: ', error);
+		};			
 	};
+
 	render() {
 		const { classes, appointments } = this.props;
 		return (
@@ -205,9 +213,9 @@ class Appointments extends Component {
 										<TableBody>
 											{this.props.appointments && (
 												<AppointmentsList
+												handleDelete={this.props.handleDelete}
 													userID={this.props.userID}
 													appointments={this.props.appointments}
-													deleteAppointment={this.props.deleteAppointment}
 												/>
 											)}
 										</TableBody>

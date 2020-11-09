@@ -129,7 +129,7 @@ export default function Header(props) {
 	const [openDrawer, setOpenDrawer] = useState(false);
 	const [value, setValue] = useState(0);
 
-	const { userName, user, logOutUser } = props;
+	const { userName, user, handleLogOut } = props;
 
 	const handleChange = (e, value) => {
 		setValue(value);
@@ -174,7 +174,7 @@ const routes = [
 				))}
 			</Tabs>
 			{user ? (
-				<Button variant="contained" color="secondary" className={classes.button} onClick={logOutUser}>
+				<Button variant="contained" color="secondary" className={classes.button} onClick={handleLogOut}>
 					Logout
 				</Button>
 			) : (

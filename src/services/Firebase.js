@@ -34,13 +34,13 @@ export const getAppointments = async () => {
 	return appointments;
 };
 
-export const addAppointmentNew = (tempApt) => {
-	return db.collection('appointments')
+export const addAppointment = async (tempApt) => {
+	return await db.collection('appointments')
 				.add(tempApt)
 };
 
-export const deleteAppointmentNew = (e, appId) => {
-	return	db.collection('appointments')
+export const deleteAppointment = async (appId) => {
+	return await db.collection('appointments')
 					.doc(appId)
 					.delete()
 };
@@ -55,8 +55,8 @@ export const getReviews = async () => {
 };
 
 
-export const signInUser = (registrationInfo) => {
-	return firebase
+export const signInUser = async (registrationInfo) => {
+	await firebase
 				.auth()
 				.signInWithEmailAndPassword(
 					registrationInfo.email, 
@@ -64,12 +64,19 @@ export const signInUser = (registrationInfo) => {
 					)
 };
 
-export const signUpUser = (registrationInfo) =>{
-	return firebase
+export const signUpUser = async (registrationInfo) =>{
+	await firebase
 				.auth()
 				.createUserWithEmailAndPassword(
 						registrationInfo.email, 
 						registrationInfo.password
 						)
 };
+
+export const logOutUser = async() => {
+	await	firebase
+			.auth()
+			.signOut()
+};
+
 export default firebase;

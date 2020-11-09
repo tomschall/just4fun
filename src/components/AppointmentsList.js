@@ -12,7 +12,6 @@ import firebase from '../services/Firebase';
 const db = firebase.firestore();
 
 class AppointmentsList extends Component {
-
 	render() {
 		const { appointments } = this.props;
 		const myAppointments = appointments.map((item) => {
@@ -32,7 +31,7 @@ class AppointmentsList extends Component {
         <TableCell align="left">
             <Button 
               title="Termin löschen"
-              onClick={e=>this.props.deleteAppointment(e, item.id)}>
+              onClick={e=>this.props.handleDelete(item.id)}>
 					<DeleteOutlineIcon style={{ fill: '#F15A24' }} />
 				</Button>	</TableCell>
         </TableRow>

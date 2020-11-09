@@ -10,8 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom';
-
-import firebase from '../services/Firebase';
+import {signUpUser} from '../services/Firebase';
 import FormError from './FormError';
 import messages from './messages';
 
@@ -56,35 +55,29 @@ class SignUp extends Component {
 		this.setState({ [itemName]: itemValue });
 	}
 
-	handleSubmit(e) {
-		var registrationInfo = {
+	handleSubmit =  async(e) =>{
+		let registrationInfo = {
 			displayName: this.state.displayName,
 			email: this.state.email,
 			password: this.state.password,
 		};
 		e.preventDefault();
-
-		firebase
-			.auth()
-			.createUserWithEmailAndPassword(
-					registrationInfo.email, 
-					registrationInfo.password)
-			.then(() => {
-				if (typeof this.props.registerUser === 'function') {
-					this.props.registerUser(registrationInfo.firstName);
-				}
-				this.props.history.push('/');
-			})
-			.catch((error) => {
-				if (error.message !== null) {
-					console.log('Firebase ERROR', error.code, error.message);
-					let errorMessage = messages[error.code] || error.message;
-					this.setState({ errorMessage });
-				} else {
-					this.setState({ errorMessage: null });
-				}
-			});
-	}
+		try {
+			await signUpUser(registrationInfo);
+			if (typeof this.props.registerUser === 'function') {
+				this.props.registerUser(registrationInfo.firstName);
+			}
+			this.props.history.push('/');
+		} catch (error){
+			if (error.message !== null) {
+				console.log('Firebase ERROR', error.code, error.message);
+				let errorMessage = messages[error.code] || error.message;
+				this.setState({ errorMessage });
+			} else {
+				this.setState({ errorMessage: null });
+			}
+		}
+	};
 
 	render() {
 		const { classes, user } = this.props;

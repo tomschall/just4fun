@@ -11,7 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import firebase from '../services/Firebase';
+import {signInUser} from '../services/Firebase';
 import FormError from './FormError';
 
 import messages from './messages';
@@ -56,34 +56,27 @@ class SignIn extends Component {
 		this.setState({ [itemName]: itemValue });
 	}
 
-	handleSubmit(e) {
-		var registrationInfo = {
+	handleSubmit = async (e) =>{
+		let registrationInfo = {
 			email: this.state.email,
 			password: this.state.password,
 		};
 		e.preventDefault();
+		try {
+			await signInUser(registrationInfo);
+			this.props.history.push('/appointments')
+		} catch(error){
+			console.log('Firebase Error:', error.code, error);
 
-		firebase
-			.auth()
-			.signInWithEmailAndPassword(
-					registrationInfo.email, 
-					registrationInfo.password
-					)
-			.then(() => {
-				//navigate('./appointments');
-				this.props.history.push('/appointments')
-			})
-			.catch((error) => {
-				console.log('Firebase Error:', error.code, error);
-
-				if (error.message !== null) {
-					let errorMessage = messages[error.code] || error.message;
-					this.setState({ errorMessage });
-				} else {
-					this.setState({ errorMessage: null });
-				}
-			});
-	}
+			if (error.message !== null) {
+				let errorMessage = messages[error.code] || error.message;
+				this.setState({ errorMessage });
+			} else {
+				this.setState({ errorMessage: null });
+			}
+		};
+	};
+	
 	render() {
 		const { classes } = this.props;
 		return (

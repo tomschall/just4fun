@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import firebase, { getAppointments, getReviews, onAuthStateChanged } from '../services/Firebase';
+import firebase, { logOutUser, getAppointments, deleteAppointment, getReviews, onAuthStateChanged } from '../services/Firebase';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -40,8 +40,7 @@ class App extends Component {
 					userID: FBUser.uid,
 				});
 
-				const appointments = await getAppointments();
-				this.setState({ appointments });
+				await this.readAppointments();
 
 				const reviews = await getReviews();
 				this.setState({ reviews });
@@ -49,48 +48,34 @@ class App extends Component {
 				this.setState({ user: null });
 			}
 		});
+	};
+	readAppointments = async() => {
+		const appointments = await getAppointments();
+		this.setState({ appointments });
 	}
 
-	logOutUser = (e) => {
-		e.preventDefault();
-		firebase
-			.auth()
-			.signOut()
-			.then(() => {
-				this.setState({
-					displayName: null,
-					userID: null,
-					user: null,
-				});
-				this.props.history.push('/');
-			});
-	};
+handleLogOut = async(e) =>{
+	e.preventDefault();
+	await logOutUser();
+	this.setState({
+		displayName: null,
+		userID: null,
+		user: null,
+	});
+	this.props.history.push('/');
+}
 
-	addAppointment = (tempApt) => {
-		db.collection('appointments')
-			.add(tempApt)
-			.then(function (docRef) {
-				console.log('Document written with ID: ', docRef.id);
-			})
-			.catch(function (error) {
-				console.error('Error adding document: ', error);
-			});
+handleDelete = async (appId) => {
+	try {
+		await deleteAppointment(appId);
+		this.setState((state) => ({
+		appointments: state.appointments.filter((app) => app.id !== appId),
+		}))
+	} catch(error) {
+		console.error('Error removing document: ', error);
 	};
-
-	deleteAppointment = (e, appId) => {
-		e.preventDefault();
-		db.collection('appointments')
-			.doc(appId)
-			.delete()
-			.then(() => {
-				this.setState((state) => ({
-					appointments: state.appointments.filter((app) => app.id !== appId),
-				}));
-			})
-			.catch(function (error) {
-				console.error('Error removing document: ', error);
-			});
-	};
+}
+	
 	addReveiw = (tempApt) => {
 		db.collection('appointments')
 			.add(tempApt)
@@ -106,7 +91,7 @@ class App extends Component {
 		return (
 			<div className="layout-container">
 				<ThemeProvider theme={theme}>
-					<Header user={this.state.user} logOutUser={this.logOutUser} />
+					<Header user={this.state.user} handleLogOut={this.handleLogOut} />
 					<div className="layout-content">
 						<Switch>
 							<Route exact path="/" component={() => <Home user={this.state.user} />} />
@@ -117,12 +102,11 @@ class App extends Component {
 							<Route path="/appointments">
 								<Appointments
 									appointments={this.state.appointments}
-									addAppointment={this.addAppointment}
+									readAppointments={this.readAppointments}
 									userID={this.state.userID}
-									deleteAppointment={this.deleteAppointment}
+									handleDelete={this.handleDelete}
 								/>
 							</Route>
-
 							<Route path="/signin" component={SignIn} />
 							<Route path="/password-reset" component={PasswordReset} />
 							<Route path="/signup">
