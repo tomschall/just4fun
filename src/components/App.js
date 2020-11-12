@@ -115,7 +115,7 @@ handleDelete = async (appId) => {
 						</Switch>
 					</div>
 					<Footer />
-					<MobileFooter user={this.state.user} logOutUser={this.logOutUser} />
+					<MobileFooter user={this.state.user} handleLogOut={this.handleLogOut} />
 				</ThemeProvider>
 			</div>
 		);

@@ -49,8 +49,9 @@ const theme =  createMuiTheme({
 theme.props = {
 	MuiButton: {
 		disableElevation: true,
+		textTransform: 'none',
 		'&:hover': {
-			color: 'red',
+			color: 'red', //Test did not work
 		}
 	},
 	MuiInputLable: {
@@ -74,9 +75,16 @@ theme.overrides = {
 			padding: theme.spacing(1)
 		},
 		button: {
-			'&:hover': {
-				color: 'red',
-			}
+			root: {
+				color: 'green',
+				'&:hover': {
+					backgroundColor: 'yellow', //just for test it did not work
+				},
+				'&:focus': {
+					outline: 'none', //just for test it did not work
+				},
+			},
+			
 		}
 
 	},
@@ -91,7 +99,7 @@ theme.overrides = {
 		underlineHover: {
 			'&:hover':{
 				textDecoration: 'none',
-				color: 'red'
+				color: theme.palette.common.red,
 			}
 
 		}

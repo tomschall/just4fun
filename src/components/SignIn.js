@@ -33,6 +33,11 @@ const styles = (theme) => ({
 	},
 	submit: {
 		margin: theme.spacing(3, 0, 2),
+		'&:hover': {
+			color: 'white',
+		},
+		background: 'linear-gradient(45deg, #F7931E, #009444, #F15A24)',
+		textTransform: 'none',
 	},
 });
 
@@ -101,6 +106,7 @@ class SignIn extends Component {
 							name="email"
 							autoComplete="email"
 							autoFocus
+							type="email"
 							value={this.state.email}
 							onChange={this.handleChange}
 						/>
@@ -118,8 +124,13 @@ class SignIn extends Component {
 							onChange={this.handleChange}
 						/>
 						{/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
-						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-							Anmelden
+						<Button 
+							type="submit" 
+							fullWidth 
+							variant="contained" 
+							color="primary" 
+							className={classes.submit}>
+								Anmelden
 						</Button>
 						<Grid container>
 							<Grid item xs>

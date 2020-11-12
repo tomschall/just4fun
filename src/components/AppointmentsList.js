@@ -6,10 +6,6 @@ import Button from '@material-ui/core/Button';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Moment from 'react-moment';
-import firebase from '../services/Firebase';
-
-
-const db = firebase.firestore();
 
 class AppointmentsList extends Component {
 	render() {
@@ -20,7 +16,10 @@ class AppointmentsList extends Component {
         <TableRow key={item.id}>					
           <TableCell align="left">{item.thema}</TableCell>
           <TableCell align="left">{item.institution}</TableCell>
-          <TableCell align="left"></TableCell>
+          <TableCell align="left"> <Moment 
+                date = {item.aptDateTime}
+                format="DD.MM.YYYY hh:mm"
+             /></TableCell>
           <TableCell align="left">
             <Button 
               title="Termin bearbeiten"

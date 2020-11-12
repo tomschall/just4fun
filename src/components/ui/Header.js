@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
@@ -77,8 +77,18 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: '50px',
 		marginRight: '25px',
 		fontFamily: 'Titillium Web',
+		fontWeight: 500,
+		fontSize: '1rem',
 		height: '45px',
 		color: 'white',
+		textTransform:'none',
+		'&:hover': {
+			color: 'white', //Test did not work
+		},
+		'&:focus': {
+			outline: 'none !important',
+		}
+
 	},
 	drawerIcon: {
 		height: '40px',
@@ -129,7 +139,7 @@ export default function Header(props) {
 	const [openDrawer, setOpenDrawer] = useState(false);
 	const [value, setValue] = useState(0);
 
-	const { userName, user, handleLogOut } = props;
+	const { user, handleLogOut } = props;
 
 	const handleChange = (e, value) => {
 		setValue(value);
@@ -248,7 +258,7 @@ const routes = [
 				disableRipple
 			>
 				{/* <MenuIcon className={classes.drawerIcon} /> */}
-				<img src={hamburger} className={classes.drawerIcon} />
+				<img alt="" src={hamburger} className={classes.drawerIcon} />
 			</IconButton>
 		</React.Fragment>
 	);

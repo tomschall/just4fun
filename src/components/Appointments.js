@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Component } from 'react';
+import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
-import { auth, deleteAppointment, addAppointment } from '../services/Firebase';
+import { auth, addAppointment } from '../services/Firebase';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -98,6 +98,8 @@ class Appointments extends Component {
 			let errorMessage = messages['empty-fields'] || 'Bitte füllen Sie alle Felder aus';
 			this.setState({ errorMessage });
 			return;
+		} else {
+			this.setState({ errorMessage: null });
 		}
 		try {
 			const docRef= await addAppointment(tempApt);
@@ -150,12 +152,14 @@ class Appointments extends Component {
 								onChange={this.handleChange}
 							/>
 							<DateTimePicker
-								variant="inline"
+							disableToolbar
+								variant="dialog"
 								margin="normal"
 								required
 								fullWidth
 								name="aptDateTime"
 								id="datetime-local"
+								format="dd/mm/yyyy hh:mm"
 								emptyLabel="Nächster Termin"
 								InputLabelProps={{
 									shrink: true,

@@ -79,4 +79,11 @@ export const logOutUser = async() => {
 			.signOut()
 };
 
+export const passwordReset = async(registrationInfo) => {
+	firebase.auth().languageCode = 'de';
+	await firebase
+				.auth()
+				.sendPasswordResetEmail(registrationInfo.email)
+}
+
 export default firebase;

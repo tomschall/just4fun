@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme) => ({
 		fontWeight: 'bold',
 		margin: 'auto',
 		maxWidth: 400,
-		'&hover': {
-			color: 'red'
-		},
 		[theme.breakpoints.down('xs')]: {
 			maxWidth: 250,
 		},

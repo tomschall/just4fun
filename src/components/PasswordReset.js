@@ -11,9 +11,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import firebase from '../services/Firebase';
+import { passwordReset} from '../services/Firebase';
 import FormError from './FormError';
-//import { navigate } from '@reach/router';
 
 import messages from './messages';
 
@@ -56,31 +55,23 @@ class PasswordReset extends Component {
 		this.setState({ [itemName]: itemValue });
 	}
 
-	handleSubmit(e) {
+	handleSubmit =  async(e) => {
 		var registrationInfo = {
 			email: this.state.email,
 		};
 		e.preventDefault();
-
-		firebase.auth().languageCode = 'de';
-
-		firebase
-			.auth()
-			.sendPasswordResetEmail(registrationInfo.email)
-			.then(() => {
-				//	navigate(//'./appointments');
-				this.props.history.push('/signin');
-			})
-			.catch((error) => {
+		try {
+			await passwordReset(registrationInfo)
+			this.props.history.push('/signin');
+		} catch(error) {
 				console.log('Firebase Error:', error.code, error);
-
 				if (error.message !== null) {
 					let errorMessage = messages[error.code] || error.message;
 					this.setState({ errorMessage });
 				} else {
 					this.setState({ errorMessage: null });
 				}
-			});
+		}			
 	}
 	render() {
 		const { classes } = this.props;
