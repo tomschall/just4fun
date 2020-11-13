@@ -39,6 +39,11 @@ export const addAppointment = async (tempApt) => {
 				.add(tempApt)
 };
 
+export const editAppointment = async (tempApt) => {
+	return await db.collection('appointments').doc(tempApt.id)
+				.set(tempApt);
+};
+
 export const deleteAppointment = async (appId) => {
 	return await db.collection('appointments')
 					.doc(appId)

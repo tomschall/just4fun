@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import firebase, { logOutUser, getAppointments, deleteAppointment, getReviews, onAuthStateChanged } from '../services/Firebase';
+import firebase, {
+	logOutUser,
+	getAppointments,
+	deleteAppointment,
+	getReviews,
+	onAuthStateChanged,
+} from '../services/Firebase';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -48,34 +54,43 @@ class App extends Component {
 				this.setState({ user: null });
 			}
 		});
-	};
-	readAppointments = async() => {
+	}
+	readAppointments = async () => {
 		const appointments = await getAppointments();
 		this.setState({ appointments });
+	};
+
+	handleLogOut = async (e) => {
+		e.preventDefault();
+		await logOutUser();
+		this.setState({
+			displayName: null,
+			userID: null,
+			user: null,
+		});
+		this.props.history.push('/');
+	};
+
+	handleDelete = async (appId) => {
+		const confirmed = window.confirm('Are you sure you want to delete?');
+		if (!confirmed) {
+			return;
+		}
+
+		try {
+			await deleteAppointment(appId);
+			this.setState((state) => ({
+				appointments: state.appointments.filter((app) => app.id !== appId),
+			}));
+		} catch (error) {
+			console.error('Error removing document: ', error);
+		}
+	};
+
+	editAppointment(e, item) {
+
 	}
 
-handleLogOut = async(e) =>{
-	e.preventDefault();
-	await logOutUser();
-	this.setState({
-		displayName: null,
-		userID: null,
-		user: null,
-	});
-	this.props.history.push('/');
-}
-
-handleDelete = async (appId) => {
-	try {
-		await deleteAppointment(appId);
-		this.setState((state) => ({
-		appointments: state.appointments.filter((app) => app.id !== appId),
-		}))
-	} catch(error) {
-		console.error('Error removing document: ', error);
-	};
-}
-	
 	addReveiw = (tempApt) => {
 		db.collection('appointments')
 			.add(tempApt)
@@ -105,6 +120,7 @@ handleDelete = async (appId) => {
 									readAppointments={this.readAppointments}
 									userID={this.state.userID}
 									handleDelete={this.handleDelete}
+									editAppointment={this.editAppointment}
 								/>
 							</Route>
 							<Route path="/signin" component={SignIn} />

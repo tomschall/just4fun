@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
-import { auth, addAppointment } from '../services/Firebase';
+import { auth, addAppointment, editAppointment } from '../services/Firebase';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,8 +21,9 @@ import FormError from './FormError';
 import AppointmentsList from './AppointmentsList';
 import messages from './messages';
 
-import DateFnsUtils from '@date-io/date-fns'; 
-import { DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import deLocale from 'date-fns/locale/de';
+import DateFnsUtils from '@date-io/date-fns';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const styles = (theme) => ({
 	paper: {
@@ -40,6 +41,7 @@ const styles = (theme) => ({
 		'&:hover': {
 			color: 'white',
 		},
+		fontSize: '1.1rem',
 	},
 	table: {
 		minWidth: 650,
@@ -59,6 +61,7 @@ class Appointments extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			id: '', // for editing existing posts
 			thema: '',
 			institution: '',
 			aptDateTime: new Date(),
@@ -70,10 +73,10 @@ class Appointments extends Component {
 		this.handleDateChange = this.handleDateChange.bind(this);
 	}
 
-	handleDateChange(newDate){
+	handleDateChange(newDate) {
 		this.setState({
-			aptDateTime: newDate
-		})
+			aptDateTime: newDate,
+		});
 	}
 	handleChange(e) {
 		const itemName = e.target.name;
@@ -86,6 +89,7 @@ class Appointments extends Component {
 	handleSubmit = async (e) => {
 		e.preventDefault();
 		let tempApt = {
+			id: this.state.id,
 			thema: this.state.thema,
 			institution: this.state.institution,
 			//aptDateTime: new Date(this.state.aptDateTime),
@@ -101,21 +105,37 @@ class Appointments extends Component {
 		} else {
 			this.setState({ errorMessage: null });
 		}
+
 		try {
-			const docRef= await addAppointment(tempApt);
-			console.log('Document written with ID: ', docRef.id);
+			let docRef;
+			if (tempApt.id) {
+				// EDIT EXISTING APT
+				docRef = await editAppointment(tempApt);
+			} else {
+				docRef = await addAppointment(tempApt);
+			}
+			console.log('Document written with ID: ', docRef?docRef.id: tempApt.id);
 			this.props.readAppointments();
-			this.setState({ thema: '', institution: '' });
-		}
-		catch(error) {
+			this.setState({id: '', thema: '', institution: '' });
+		} catch (error) {
 			console.error('Error adding document: ', error);
-		};			
+		}
+	};
+	editAppointment = (e, item) => {
+		console.log('item:', item, item.aptDateTime.toDate());
+		this.setState({
+			id: item.id,
+			thema: item.thema,
+			institution: item.institution,
+			aptDateTime: item.aptDateTime.toDate(),
+		});
+		this.props.editAppointment(e, item);
 	};
 
 	render() {
 		const { classes, appointments } = this.props;
 		return (
-			<MuiPickersUtilsProvider utils={DateFnsUtils}>
+			<MuiPickersUtilsProvider locale={deLocale} utils={DateFnsUtils}>
 				<Container component="main" maxWidth="xs">
 					<CssBaseline />
 					<div className={classes.paper}>
@@ -152,14 +172,15 @@ class Appointments extends Component {
 								onChange={this.handleChange}
 							/>
 							<DateTimePicker
-							disableToolbar
+								disableToolbar
 								variant="dialog"
 								margin="normal"
 								required
 								fullWidth
+								ampm={false}
 								name="aptDateTime"
 								id="datetime-local"
-								format="dd/mm/yyyy hh:mm"
+								// format="dd/mm/yyyy hh:mm"
 								emptyLabel="Nächster Termin"
 								InputLabelProps={{
 									shrink: true,
@@ -174,13 +195,13 @@ class Appointments extends Component {
 								color="primary"
 								className={classes.submit}
 							>
-								Einen Termin vereinbaren
+								{this.state.id ?`Edit`:`Einen Termin vereinbaren`}
 							</Button>
 						</form>
 					</div>
 				</Container>
 				<Grid container>
-					<Grid item lg={2} md={0} sm={0}/>
+					<Grid item lg={2} md={0} sm={0} />
 					<Grid item xs={12} md={12} lg={8} className={classes.tablePadding}>
 						<Grid container>
 							<Grid item xs={12} className={classes.mobileMargin}>
@@ -217,9 +238,10 @@ class Appointments extends Component {
 										<TableBody>
 											{this.props.appointments && (
 												<AppointmentsList
-												handleDelete={this.props.handleDelete}
+													handleDelete={this.props.handleDelete}
 													userID={this.props.userID}
 													appointments={this.props.appointments}
+													editAppointment={this.editAppointment}
 												/>
 											)}
 										</TableBody>
@@ -228,7 +250,7 @@ class Appointments extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item lg={2} md={0} sm={0}/>
+					<Grid item lg={2} md={0} sm={0} />
 				</Grid>
 			</MuiPickersUtilsProvider>
 		);
