@@ -5,14 +5,13 @@ import Button from '@material-ui/core/Button';
 
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import Moment from 'react-moment';
+//import Moment from 'react-moment';
 
 class AppointmentsList extends Component {
 	render() {
 		const { appointments } = this.props;
 		const myAppointments = appointments.map((item) => {
-      console.log('the item', item);
-      console.log('the new date', new Date(item.aptDateTime.seconds*1000))
+      //console.log('the new date', new Date(item.aptDateTime.seconds*1000))
       const date = new Date(item.aptDateTime.seconds*1000);
 			return (
         <TableRow key={item.id}>					
@@ -20,6 +19,10 @@ class AppointmentsList extends Component {
           <TableCell align="left">{item.institution}</TableCell>
           
           <TableCell align="left">{date.getDate()}. {date.getMonth()+1}. {date.getFullYear()} {date.getHours()}:{date.getMinutes()} </TableCell>
+        {/*   <TableCell align="left"><Moment 
+                date = {date}
+                format="DD.MM.YYYY hh:mm"
+             /> </TableCell> */}
           <TableCell align="left">
             <Button 
               title="Termin bearbeiten"

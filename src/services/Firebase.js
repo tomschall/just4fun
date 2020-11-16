@@ -24,30 +24,35 @@ export const onAuthStateChanged = (cb) => {
 	firebase.auth().onAuthStateChanged(cb);
 };
 
-export const getAppointments = async () => {
-	const querySnapshot = await db.collection('appointments').get();
+export const getAppointments = async ({ all }) => {
+	if (all) {
+		console.log('[getAppointments] ALL', auth.currentUser.uid);
+	} else {
+		console.log('[getAppointments] for uid', auth.currentUser.uid);
+	}
+	let query = db.collection('appointments');
+	if (!all) {
+		query = query.where('uid', '==', auth.currentUser.uid);
+	}
+	const querySnapshot = await query.get();
+	//console.log('[getAppointments] results', querySnapshot.size);
 	let appointments = [];
 	querySnapshot.forEach((doc) => {
 		appointments.push({ ...doc.data(), id: doc.id });
 	});
-
 	return appointments;
 };
 
 export const addAppointment = async (tempApt) => {
-	return await db.collection('appointments')
-				.add(tempApt)
+	return await db.collection('appointments').add(tempApt);
 };
 
 export const editAppointment = async (tempApt) => {
-	return await db.collection('appointments').doc(tempApt.id)
-				.set(tempApt);
+	return await db.collection('appointments').doc(tempApt.id).set(tempApt);
 };
 
 export const deleteAppointment = async (appId) => {
-	return await db.collection('appointments')
-					.doc(appId)
-					.delete()
+	return await db.collection('appointments').doc(appId).delete();
 };
 
 export const getReviews = async () => {
@@ -59,36 +64,21 @@ export const getReviews = async () => {
 	return reviews;
 };
 
-
 export const signInUser = async (registrationInfo) => {
-	await firebase
-				.auth()
-				.signInWithEmailAndPassword(
-					registrationInfo.email, 
-					registrationInfo.password
-					)
+	await firebase.auth().signInWithEmailAndPassword(registrationInfo.email, registrationInfo.password);
 };
 
-export const signUpUser = async (registrationInfo) =>{
-	await firebase
-				.auth()
-				.createUserWithEmailAndPassword(
-						registrationInfo.email, 
-						registrationInfo.password
-						)
+export const signUpUser = async (registrationInfo) => {
+	await firebase.auth().createUserWithEmailAndPassword(registrationInfo.email, registrationInfo.password);
 };
 
-export const logOutUser = async() => {
-	await	firebase
-			.auth()
-			.signOut()
+export const logOutUser = async () => {
+	await firebase.auth().signOut();
 };
 
-export const passwordReset = async(registrationInfo) => {
+export const passwordReset = async (registrationInfo) => {
 	firebase.auth().languageCode = 'de';
-	await firebase
-				.auth()
-				.sendPasswordResetEmail(registrationInfo.email)
-}
+	await firebase.auth().sendPasswordResetEmail(registrationInfo.email);
+};
 
 export default firebase;

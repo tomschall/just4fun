@@ -6,6 +6,7 @@ import firebase, {
 	deleteAppointment,
 	getReviews,
 	onAuthStateChanged,
+	auth,
 } from '../services/Firebase';
 
 import Home from './pages/Home';
@@ -35,6 +36,7 @@ class App extends Component {
 		displayName: null,
 		userID: null,
 		appointments: [],
+		admin: false,
 	};
 
 	componentDidMount() {
@@ -55,8 +57,17 @@ class App extends Component {
 			}
 		});
 	}
+
+	loadAll = () => {
+		this.setState({ admin: true }, () => {
+			this.readAppointments();
+		});
+	};
 	readAppointments = async () => {
-		const appointments = await getAppointments();
+		if (!auth.currentUser) {
+			return;
+		}
+		const appointments = await getAppointments({ all: this.state.admin });
 		this.setState({ appointments });
 	};
 
@@ -87,9 +98,7 @@ class App extends Component {
 		}
 	};
 
-	editAppointment(e, item) {
-
-	}
+	editAppointment(e, item) {}
 
 	addReveiw = (tempApt) => {
 		db.collection('appointments')
@@ -114,15 +123,31 @@ class App extends Component {
 							<Route path="/interpreting" component={TelephoneInterpreting} />
 							<Route path="/faq" component={Faq} />
 							<Route path="/reviews" component={Reviews} />
-							<Route path="/appointments">
-								<Appointments
+							<Route
+								path="/appointments/:listAll?"
+								children={({ match }) => {
+									return (
+										<Appointments
+											appointments={this.state.appointments}
+											readAppointments={this.readAppointments}
+											userID={this.state.userID}
+											handleDelete={this.handleDelete}
+											editAppointment={this.editAppointment}
+											match={match}
+											loadAll={this.loadAll}
+											admin={this.state.admin}
+										/>
+									);
+								}}
+							></Route>
+							{/*<Route path="/appointments-list">
+								<AppointmentsAll
 									appointments={this.state.appointments}
 									readAppointments={this.readAppointments}
-									userID={this.state.userID}
 									handleDelete={this.handleDelete}
 									editAppointment={this.editAppointment}
 								/>
-							</Route>
+							</Route>*/}
 							<Route path="/signin" component={SignIn} />
 							<Route path="/password-reset" component={PasswordReset} />
 							<Route path="/signup">

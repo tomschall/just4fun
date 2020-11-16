@@ -44,55 +44,42 @@ const theme = createMuiTheme({
 			color: '#272727',
 		},
 	},
-	overrides: {
-		MuiButton: {
-			root: {
-				color: 'green',
-				'&:focus': {
-					outline: 'none', //just for test it did not work
-				},
-				textTransform:'none',
-			}
-		},
-	},
 });
 
 theme.props = {
 	MuiButton: {
 		disableElevation: true,
 		textTransform: 'none',
-		'&:hover': {
-			color: 'red', //Test did not work
-		},
 	},
 	MuiInputLable: {
 		//shrink: true
 	},
 	MuiInput: {
-		disableUnderlin: true,
+		//disableUnderline: true,
 	},
 };
-/*
+
 theme.overrides = {
 	MuiButton: {
 		root: {
 			color: 'green',
-		},
-		focusVisible: {
-			outline: 'none', //just for test it did not work
-		},
-		button: {
-			root: {
-				color: 'green',
-				'&:hover': {
-					backgroundColor: 'yellow', //just for test it did not work
-				},
-				'&:focus': {
-					outline: 'none', //just for test it did not work
-				},
+			'&:focus': {
+				outline: 'none', 
+			},
+			textTransform:'none',
+			'&:hover': {
+				color: 'white',
+			},
+		}
+	},
+	MuiLink: {
+		underlineHover: {
+			'&:hover': {
+				textDecoration: 'none',
+				color: theme.palette.common.red,
 			},
 		},
-	},
+	},	
 	MuiInput: {
 		root: {
 			top: theme.spacing(2),
@@ -107,14 +94,6 @@ theme.overrides = {
 		},
 	},
 
-	MuiLink: {
-		underlineHover: {
-			'&:hover': {
-				textDecoration: 'none',
-				color: theme.palette.common.red,
-			},
-		},
-	},
 };
-*/
+
 export default theme;

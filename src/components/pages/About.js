@@ -58,7 +58,7 @@ function About() {
 	return (
 		<div className={classes.root}>
 			<Grid container className={classes.mainContainer} >
-				<Grid item lg={2} md={0} sm={0}/>
+				<Grid item lg={2}/>
 				<Grid item xs={12} md={12} lg={8}>
 					<Grid container>
 						<Grid item xs={12}>
@@ -83,7 +83,7 @@ function About() {
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item lg={2} md={0} sm={0}/>
+				<Grid item lg={2}/>
 			</Grid>
 			<div className={classes.toolbarMargin} />
 		</div>

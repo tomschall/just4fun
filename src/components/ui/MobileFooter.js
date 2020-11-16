@@ -5,16 +5,12 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		'&:hover': {
-			color: 'white',
-		},
-		textTransform: 'none',		
+	root: {		
 		fontWeight: 500,
 		fontSize: '1rem',
 	},
 	mobileFooter: {
-		[theme.breakpoints.up('md')]: {
+		[theme.breakpoints.up('lg')]: {
 			display: 'none',
 		},
 	},

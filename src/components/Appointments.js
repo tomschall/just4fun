@@ -38,10 +38,6 @@ const styles = (theme) => ({
 	},
 	submit: {
 		margin: theme.spacing(3, 0, 2),
-		'&:hover': {
-			color: 'white',
-		},
-		fontSize: '1.1rem',
 	},
 	table: {
 		minWidth: 650,
@@ -73,6 +69,13 @@ class Appointments extends Component {
 		this.handleDateChange = this.handleDateChange.bind(this);
 	}
 
+	componentDidMount() {
+		//console.log('[Appointments] listAll:', this.props.match.params.listAll === 'all');
+		if (this.props.match.params.listAll === 'all') {
+			this.props.loadAll(); // set the state in App {loadAll: true}
+		}
+	}
+
 	handleDateChange(newDate) {
 		this.setState({
 			aptDateTime: newDate,
@@ -97,7 +100,7 @@ class Appointments extends Component {
 			email: auth.currentUser.email,
 			uid: auth.currentUser.uid,
 		};
-		console.log('Test date and time', tempApt.aptDateTime);
+		// console.log('Test date and time', tempApt.aptDateTime);
 		if (!tempApt.thema || !tempApt.institution || !tempApt.aptDateTime) {
 			let errorMessage = messages['empty-fields'] || 'Bitte füllen Sie alle Felder aus';
 			this.setState({ errorMessage });
@@ -114,15 +117,15 @@ class Appointments extends Component {
 			} else {
 				docRef = await addAppointment(tempApt);
 			}
-			console.log('Document written with ID: ', docRef?docRef.id: tempApt.id);
+			console.log('Document written with ID: ', docRef ? docRef.id : tempApt.id);
 			this.props.readAppointments();
-			this.setState({id: '', thema: '', institution: '' });
+			this.setState({ id: '', thema: '', institution: '' });
 		} catch (error) {
 			console.error('Error adding document: ', error);
 		}
 	};
 	editAppointment = (e, item) => {
-		console.log('item:', item, item.aptDateTime.toDate());
+		//console.log('item:', item, item.aptDateTime.toDate());
 		this.setState({
 			id: item.id,
 			thema: item.thema,
@@ -138,70 +141,67 @@ class Appointments extends Component {
 			<MuiPickersUtilsProvider locale={deLocale} utils={DateFnsUtils}>
 				<Container component="main" maxWidth="xs">
 					<CssBaseline />
-					<div className={classes.paper}>
-						<Typography component="h1" variant="h5">
-							Termin vereinbaren
-						</Typography>
-						<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
-							{this.state.errorMessage !== null ? (
-								<FormError theMessage={this.state.errorMessage} />
-							) : null}
-							<TextField
-								variant="outlined"
-								margin="normal"
-								required
-								fullWidth
-								id="thema"
-								label="Das Thema"
-								name="thema"
-								autoComplete="thema"
-								autoFocus
-								value={this.state.thema}
-								onChange={this.handleChange}
-							/>
-							<TextField
-								variant="outlined"
-								margin="normal"
-								required
-								fullWidth
-								id="institution"
-								label="Name & Institution"
-								name="institution"
-								autoComplete="institution"
-								value={this.state.institution}
-								onChange={this.handleChange}
-							/>
-							<DateTimePicker
-								disableToolbar
-								variant="dialog"
-								margin="normal"
-								required
-								fullWidth
-								ampm={false}
-								name="aptDateTime"
-								id="datetime-local"
-								// format="dd/mm/yyyy hh:mm"
-								emptyLabel="Nächster Termin"
-								InputLabelProps={{
-									shrink: true,
-								}}
-								value={this.state.aptDateTime}
-								onChange={this.handleDateChange}
-							/>
-							<Button
-								type="submit"
-								fullWidth
-								variant="contained"
-								color="primary"
-								className={classes.submit}
-							>
-								{this.state.id ?`Edit`:`Einen Termin vereinbaren`}
-							</Button>
-						</form>
-					</div>
+						<div className={classes.paper}>
+							<Typography component="h1" variant="h5">
+								Termin vereinbaren
+							</Typography>
+							<form className={classes.form} noValidate onSubmit={this.handleSubmit}>
+								{this.state.errorMessage !== null ? (
+									<FormError theMessage={this.state.errorMessage} />
+								) : null}
+								<TextField
+									variant="outlined"
+									margin="normal"
+									required
+									fullWidth
+									id="thema"
+									label="Das Thema"
+									name="thema"
+									autoComplete="thema"
+									autoFocus
+									value={this.state.thema}
+									onChange={this.handleChange}
+								/>
+								<TextField
+									variant="outlined"
+									margin="normal"
+									required
+									fullWidth
+									id="institution"
+									label="Name & Institution"
+									name="institution"
+									autoComplete="institution"
+									value={this.state.institution}
+									onChange={this.handleChange}
+								/>
+								<DateTimePicker
+									//disableToolbar
+									variant="dialog"
+									margin="normal"
+									required
+									fullWidth
+									ampm={false}
+									name="aptDateTime"
+									id="datetime-local"
+									// format="dd/mm/yyyy hh:mm"
+									label="Nächster Termin"
+									value={this.state.aptDateTime}
+									onChange={this.handleDateChange}
+								/>
+								<Button
+									type="submit"
+									fullWidth
+									variant="contained"
+									color="primary"
+									className={classes.submit}
+								>
+									{this.state.id ? `Änderungen speichern` : `Einen Termin vereinbaren`}
+								</Button>
+							</form>
+						</div>
 				</Container>
 				<Grid container>
-					<Grid item lg={2} md={0} sm={0} />
+					<Grid item lg={2}/>
 					<Grid item xs={12} md={12} lg={8} className={classes.tablePadding}>
 						<Grid container>
 							<Grid item xs={12} className={classes.mobileMargin}>
@@ -224,7 +224,7 @@ class Appointments extends Component {
 														Institution
 													</TableCell>
 													<TableCell classes={{ root: classes.tableHead }} align="left">
-														Datum & Zeit
+														Datum & Uhrzeit
 													</TableCell>
 													<TableCell classes={{ root: classes.tableHead }} align="left">
 														Bearbeiten
@@ -250,7 +250,7 @@ class Appointments extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item lg={2} md={0} sm={0} />
+					<Grid item lg={2}/>
 				</Grid>
 			</MuiPickersUtilsProvider>
 		);

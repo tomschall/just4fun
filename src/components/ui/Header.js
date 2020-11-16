@@ -81,10 +81,6 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '1rem',
 		height: '45px',
 		color: 'white',
-		textTransform:'none',
-		'&:hover': {
-			color: 'white', //Test did not work
-		},
 		'&:focus': {
 			outline: 'none !important',
 		}

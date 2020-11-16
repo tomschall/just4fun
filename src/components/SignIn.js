@@ -33,11 +33,7 @@ const styles = (theme) => ({
 	},
 	submit: {
 		margin: theme.spacing(3, 0, 2),
-		'&:hover': {
-			color: 'white',
-		},
-		background: 'linear-gradient(45deg, #F7931E, #009444, #F15A24)',
-		textTransform: 'none',
+		// background: 'linear-gradient(45deg, #F7931E, #009444, #F15A24)'
 	},
 });
 
