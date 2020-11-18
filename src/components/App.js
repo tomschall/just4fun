@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import {
-	logOutUser,
-	getAppointments,
-	deleteAppointment,
-	getReviews,
-	onAuthStateChanged,
-	auth,
+  logOutUser,
+  getAppointments,
+  deleteAppointment,
+  getReviews,
+  onAuthStateChanged,
+  auth,
 } from '../services/Firebase';
 
 import Home from './pages/Home';
@@ -28,122 +29,119 @@ import { ThemeProvider } from '@material-ui/core';
 
 import theme from '../components/ui/Theme';
 
-class App extends Component {
-	state = {
-		user: null,
-		displayName: null,
-		userID: null,
-		appointments: [],
-		admin: false,
-	};
+const App = (props) => {
+  const [user, setUser] = useState(null);
+  const [displayName, setDisplayName] = useState(null);
+  const [userID, setUserID] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+  const [admin, setAdmin] = useState(false);
+  let history = useHistory();
 
-	componentDidMount() {
-		onAuthStateChanged(async (FBUser) => {
-			if (FBUser) {
-				this.setState({
-					user: FBUser,
-					displayName: FBUser.displayName,
-					userID: FBUser.uid,
-				});
+  useEffect(() => {
+    console.log('useEffect');
+    onAuthStateChanged(async (FBUser) => {
+      console.log('onAuthStateChanged', FBUser);
+      if (FBUser) {
+        console.log('inside');
+        setUser(FBUser);
+        setDisplayName(FBUser.displayName);
+        setUserID(FBUser.uid);
 
-				await this.readAppointments();
+        const ap = await readAppointments();
+        console.log('ap', ap);
 
-				const reviews = await getReviews();
-				this.setState({ reviews });
-			} else {
-				this.setState({ user: null });
-			}
-		});
-	}
+        const reviews = await getReviews();
+        console.log('reviews', reviews);
+        // TODO
+        // setState
+        // this.setState({ reviews });
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
 
-	loadAll = () => {
-		this.setState({ admin: true }, () => {
-			this.readAppointments();
-		});
-	};
-	readAppointments = async () => {
-		if (!auth.currentUser) {
-			return;
-		}
-		const appointments = await getAppointments({ all: this.state.admin });
-		this.setState({ appointments });
-	};
+  const loadAll = () => {
+    setAdmin(true);
+    readAppointments();
+  };
 
-	handleLogOut = async (e) => {
-		e.preventDefault();
-		await logOutUser();
-		this.setState({
-			displayName: null,
-			userID: null,
-			user: null,
-		});
-		this.props.history.push('/');
-	};
+  const readAppointments = async () => {
+    if (!auth.currentUser) {
+      return;
+    }
+    const appointments = await getAppointments({ all: admin });
+    setAppointments(appointments);
+  };
 
-	handleDelete = async (appId) => {
-		const confirmed = window.confirm('Are you sure you want to delete?');
-		if (!confirmed) {
-			return;
-		}
+  const handleLogOut = async (e) => {
+    e.preventDefault();
+    await logOutUser();
+    setDisplayName(null);
+    setUserID(null);
+    setUser(null);
 
-		try {
-			await deleteAppointment(appId);
-			this.setState((state) => ({
-				appointments: state.appointments.filter((app) => app.id !== appId),
-			}));
-		} catch (error) {
-			console.error('Error removing document: ', error);
-		}
-	};
+    history.push('/');
+  };
 
-	editAppointment(e, item) {}
+  const handleDelete = async (appId) => {
+    const confirmed = window.confirm('Are you sure you want to delete?');
+    if (!confirmed) {
+      return;
+    }
 
-	addReview = async (tempReview) => {
-	
-	};
+    try {
+      await deleteAppointment(appId);
+      setAppointments(appointments.filter((app) => app.id !== appId));
+    } catch (error) {
+      console.error('Error removing document: ', error);
+    }
+  };
 
-	render() {
-		return (
-			<div className="layout-container">
-				<ThemeProvider theme={theme}>
-					<Header user={this.state.user} handleLogOut={this.handleLogOut} />
-					<div className="layout-content">
-						<Switch>
-							<Route exact path="/" component={() => <Home user={this.state.user} />} />
-							<Route path="/about" component={About} />
-							<Route path="/interpreting" component={TelephoneInterpreting} />
-							<Route path="/faq" component={Faq} />
-							<Route path="/reviews" component={Reviews} />
-							<Route
-								path="/appointments/:listAll?"
-								children={({ match }) => {
-									return (
-										<Appointments
-											appointments={this.state.appointments}
-											readAppointments={this.readAppointments}
-											userID={this.state.userID}
-											handleDelete={this.handleDelete}
-											editAppointment={this.editAppointment}
-											match={match}
-											loadAll={this.loadAll}
-											admin={this.state.admin}
-										/>
-									);
-								}}
-							></Route>
-							<Route path="/signin" component={SignIn} />
-							<Route path="/password-reset" component={PasswordReset} />
-							<Route path="/signup">
-								<SignUp user={this.state.user} />
-							</Route>
-						</Switch>
-					</div>
-					<Footer />
-					<MobileFooter user={this.state.user} handleLogOut={this.handleLogOut} />
-				</ThemeProvider>
-			</div>
-		);
-	}
-}
+  const editAppointment = (e, item) => {};
 
-export default withRouter(App);
+  const addReview = async (tempReview) => {};
+
+  return (
+    <div className="layout-container">
+      <ThemeProvider theme={theme}>
+        <Header user={user} handleLogOut={handleLogOut} />
+        <div className="layout-content">
+          <Switch>
+            <Route exact path="/" component={() => <Home user={user} />} />
+            <Route path="/about" component={About} />
+            <Route path="/interpreting" component={TelephoneInterpreting} />
+            <Route path="/faq" component={Faq} />
+            <Route path="/reviews" component={Reviews} />
+            <Route
+              path="/appointments/:listAll?"
+              children={({ match }) => {
+                return (
+                  <Appointments
+                    appointments={appointments}
+                    readAppointments={readAppointments}
+                    userID={userID}
+                    handleDelete={handleDelete}
+                    editAppointment={editAppointment}
+                    match={match}
+                    loadAll={loadAll}
+                    admin={admin}
+                  />
+                );
+              }}
+            ></Route>
+            <Route path="/signin" component={SignIn} />
+            <Route path="/password-reset" component={PasswordReset} />
+            <Route path="/signup">
+              <SignUp user={user} />
+            </Route>
+          </Switch>
+        </div>
+        <Footer />
+        <MobileFooter user={user} handleLogOut={handleLogOut} />
+      </ThemeProvider>
+    </div>
+  );
+};
+
+export default App;
