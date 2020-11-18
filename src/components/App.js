@@ -38,11 +38,9 @@ const App = (props) => {
   let history = useHistory();
 
   useEffect(() => {
-    console.log('useEffect');
     onAuthStateChanged(async (FBUser) => {
       console.log('onAuthStateChanged', FBUser);
       if (FBUser) {
-        console.log('inside');
         setUser(FBUser);
         setDisplayName(FBUser.displayName);
         setUserID(FBUser.uid);
