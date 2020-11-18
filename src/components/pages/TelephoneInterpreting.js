@@ -47,6 +47,10 @@ function TelephoneInterpreting() {
 					name="description"
 					content="Habescha: Das Telefondolmetschdienst für Tigrinya, Amharisch, Deutsch"
 				/>
+				<meta
+					name="keywords"
+					content="Habescha, Interkulturelles Dolmetschen, Telefondolmetschen, Tigrigna, Tigrinya, Amharisch, Deutsch"
+				/>
 		</Helmet>
 		<Grid container className={classes.mainContainer} >
 			<Grid item lg={2}></Grid>
@@ -81,5 +85,4 @@ function TelephoneInterpreting() {
 	</div>
 	);
 }
-
 export default TelephoneInterpreting;

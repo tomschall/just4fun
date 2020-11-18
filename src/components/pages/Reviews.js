@@ -1,5 +1,26 @@
-import React from 'react';
-import { makeStyles, useTheme, Grid, Typography, useMediaQuery} from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { makeStyles, Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { Helmet } from 'react-helmet';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import ReviewsList from '../ReviewsList';
+import FormError from '../FormError';
+import { auth, getReviews, addReview } from '../../services/Firebase';
+
+import messages from '../messages';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -23,45 +44,198 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.down('xs')]: {
 			marginTop: '1em',
 		},
-	}
+	},
+	paper: {
+		marginTop: theme.spacing(8),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+	},
+	form: {
+		width: '100%', // Fix IE 11 issue.
+		marginTop: theme.spacing(1),
+	},
+	submit: {
+		margin: theme.spacing(3, 0, 2),
+	},
+	table: {
+		minWidth: 650,
+	},
+	tableHead: {
+		fontWeight: 700,
+	},
+	tablePadding: {
+		padding: '16px',
+	},
+	errorIcon: {
+		color: 'red',
+	},
 }));
 
-const reviewHeading = 'Kundenbewertungen';
-const reviewBodyText =
-	'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way. When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then ';
-
 function Reviews() {
+	const [id, setId] = useState('');
+	const [review, setReview] = useState('');
+	const [nameAndInstitution, setNameAndInstitution] = useState('');
+	const [reviewedDate, setReviewedDate] = useState(new Date());
+	const [errorMessage, setErrorMessage] = useState(null);
+
+	const [reviews, setReviews] = useState(null); // [] array
+
+	const readReviews = async () => {
+		try {
+			const reviews = await getReviews();
+			setReviews(reviews);
+		} catch (error) {
+			console.log('could not get reviews.', error);
+		}
+	}
+
+	useEffect(() => {
+		readReviews();
+	}, []);
+
 	const classes = useStyles();
-	const theme = useTheme();
-	const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		let tempReview = {
+			id: id,
+			review: review,
+			reviewedDate: reviewedDate,
+			nameAndInstitution: nameAndInstitution,
+			email: auth.currentUser.email,
+			uid: auth.currentUser.uid,
+		};
+		if (!tempReview.review || !tempReview.nameAndInstitution) {
+			setErrorMessage(messages['empty-fields'] || 'Bitte füllen Sie alle Felder aus');
+			return;
+		}
+
+		let newDocRef;
+		try {
+			newDocRef = await addReview(tempReview);
+			console.log('Document written with ID: ', newDocRef.id);
+			setReview('');
+			setNameAndInstitution('');
+		} catch (error) {
+			console.error('Error adding review: ', error);
+		}
+
+		try {
+			await readReviews();
+		} catch (error) {
+			console.error('Error adding document: ', error);
+		}
+	};
+
+	const handleChange = (e) => {
+		const itemName = e.target.name;
+		const itemValue = e.target.value;
+		if (itemName === 'review') {
+			setReview(itemValue);
+		} else if (itemName === 'nameAndInstitution') {
+			setNameAndInstitution(itemValue);
+		}
+	};
+
 	return (
-		<div className={classes.root}>
-			<Grid container className={classes.mainContainer} >
-				<Grid item lg={2}/>
-				<Grid item xs={12} md={12} lg={8}>
+		<>
+			<Helmet>
+				<title>Habescha: Kundenbewertungen </title>
+				<link rel="canonical" href="http://habescha.ch/home" />
+				<meta
+					name="description"
+					content="Habescha: Interkulturelles Telefon-Dolmetschen für Tigrinya, Amharisch, Deutsch"
+				/>
+				<meta
+					name="keywords"
+					content="Habescha, Interkulturelles Dolmetschen, Telefondolmetschen, Tigrigna, Tigrinya, Amharisch, Deutsch"
+				/>
+			</Helmet>
+			<Container component="main" maxWidth="xs">
+				<CssBaseline />
+				<div className={classes.paper}>
+					<Typography component="h1" variant="h5">
+						Rezesion schreiben
+					</Typography>
+					<form className={classes.form} noValidate onSubmit={handleSubmit}>
+						{errorMessage !== null ? <FormError theMessage={errorMessage} /> : null}
+						<TextField
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="review"
+							label="Ihre Rezesion..."
+							name="review"
+							autoComplete="thema"
+							autoFocus
+							multiline
+							rows={3}
+							rowsMax={10}
+							value={review}
+							onChange={handleChange}
+						/>
+						<TextField
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="nameAndInstitution"
+							label="Name & Institution"
+							name="nameAndInstitution"
+							autoComplete="institution"
+							value={nameAndInstitution}
+							onChange={handleChange}
+						/>
+						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+							Senden
+						</Button>
+					</form>
+				</div>
+			</Container>
+			<Grid container>
+				<Grid item lg={2} />
+				<Grid item xs={12} md={12} lg={8} className={classes.tablePadding}>
 					<Grid container>
-						<Grid item xs={12}>
-							<Typography 
-							style={{fontSize: matchesXS ? '2rem' : null}}
-							variant="h1" color="primary" gutterBottom>
-									{reviewHeading}
-							</Typography>
-						</Grid>
-						<Grid item xs={12}>
-							<Grid container>
-								<Grid item xs={12} md={12}>
-								<Typography variant="body1" gutterBottom>
-									{reviewBodyText}
+						<Grid item xs={12} className={classes.mobileMargin}>
+							{reviews && reviews.length ? (
+								<Typography variant="h3" color="primary" gutterBottom>
+								Kundenbewertungen
 								</Typography>
-								</Grid>								
-							</Grid>
+							) : null}
+						</Grid>
+						<Grid item xs={12} className={classes.mobileMargin}>
+							<TableContainer component={Paper}>
+								<Table className={classes.table} size="small" aria-label="a dense table">
+									{reviews && reviews.length ? (
+										<TableHead>
+											<TableRow>
+												<TableCell style={{width:'70%'}} classes={{ root: classes.tableHead }} align="left">
+													Bewertung
+												</TableCell>
+												<TableCell classes={{ root: classes.tableHead }} align="left">
+													Name, Institution
+												</TableCell>
+												<TableCell classes={{ root: classes.tableHead }} align="left">
+													Datum 
+												</TableCell>
+											</TableRow>
+										</TableHead>
+									) : null}
+									<TableBody>
+										{reviews ? (
+											<ReviewsList reviews={reviews} />
+										) : null}
+									</TableBody>
+								</Table>
+							</TableContainer>
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item lg={2}/>
+				<Grid item lg={2} />
 			</Grid>
-			<div className={classes.toolbarMargin} />
-		</div>
+		</>
 	);
 }
 

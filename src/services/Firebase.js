@@ -54,9 +54,12 @@ export const editAppointment = async (tempApt) => {
 export const deleteAppointment = async (appId) => {
 	return await db.collection('appointments').doc(appId).delete();
 };
+export const addReview = async (doc) => {
+	return await db.collection('reviews').add(doc);
+};
 
 export const getReviews = async () => {
-	const querySnapshot = await db.collection('appointments').get();
+	const querySnapshot = await db.collection('reviews').get();
 	let reviews = [];
 	querySnapshot.forEach((doc) => {
 		reviews.push({ ...doc.data(), id: doc.id });

@@ -3,6 +3,7 @@ import { withStyles, makeStyles, useTheme, Grid, Typography, useMediaQuery } fro
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
+import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -91,6 +92,18 @@ function Faq() {
 
 	return (
 		<div className={classes.root}>
+			<Helmet>
+				<title>Habescha: Häufig gestellte Fragen</title>
+				<link rel="canonical" href="http://habescha.ch/home" />
+				<meta
+					name="description"
+					content="Habescha: Interkulturelles Telefon-Dolmetschen für Tigrinya, Amharisch, Deutsch"
+				/>
+				<meta
+					name="keywords"
+					content="Habescha, Interkulturelles Dolmetschen, Telefondolmetschen, Tigrigna, Tigrinya, Amharisch, Deutsch"
+				/>
+			</Helmet>
 			<Grid container className={classes.mainContainer}>
 			<Grid item lg={2}/>
 				<Grid item xs={12} md={12} lg={8}>

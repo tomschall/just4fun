@@ -4,6 +4,7 @@ import me from '../../assets/me.png';
 import Grid from '@material-ui/core/Grid';
 import { Typography, useMediaQuery } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -57,6 +58,18 @@ function About() {
 
 	return (
 		<div className={classes.root}>
+		<Helmet>
+				<title>Habescha: Nigsty Abreha </title>
+				<link rel="canonical" href="http://habescha.ch/home" />
+				<meta
+					name="description"
+					content="Habescha: Interkulturelles Telefon-Dolmetschen für Tigrinya, Amharisch, Deutsch"
+				/>
+				<meta
+					name="keywords"
+					content="Habescha, Interkulturelles Dolmetschen, Telefondolmetschen, Tigrigna, Tigrinya, Amharisch, Deutsch"
+				/>
+			</Helmet>
 			<Grid container className={classes.mainContainer} >
 				<Grid item lg={2}/>
 				<Grid item xs={12} md={12} lg={8}>

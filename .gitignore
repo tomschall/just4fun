@@ -7,7 +7,6 @@
 /.firebase
 /build
 
-database.rules.json
 
 # testing
 /coverage
@@ -31,3 +30,5 @@ README.md
 
 # some notes while developing
 notes.txt
+
+database.rules.json

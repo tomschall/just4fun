@@ -47,7 +47,7 @@ function Home(props) {
 					<link rel="canonical" href="http://habescha.ch/home" />
 					<meta
 						name="description"
-						content="Habescha: Das Telefondolmetschdienst für Tigrinya, Amharisch, Deutsch"
+						content="Habescha: Interkulturelles Telefon-Dolmetschen für Tigrinya, Amharisch, Deutsch"
 					/>
 					<meta
 						name="keywords"

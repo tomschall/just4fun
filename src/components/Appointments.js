@@ -57,7 +57,7 @@ class Appointments extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			id: '', // for editing existing posts
+			id: '', // for editing existing appointment
 			thema: '',
 			institution: '',
 			aptDateTime: new Date(),
@@ -95,7 +95,6 @@ class Appointments extends Component {
 			id: this.state.id,
 			thema: this.state.thema,
 			institution: this.state.institution,
-			//aptDateTime: new Date(this.state.aptDateTime),
 			aptDateTime: this.state.aptDateTime,
 			email: auth.currentUser.email,
 			uid: auth.currentUser.uid,

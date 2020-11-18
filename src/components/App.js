@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import firebase, {
+import {
 	logOutUser,
 	getAppointments,
 	deleteAppointment,
@@ -27,8 +27,6 @@ import '../css/App.css';
 import { ThemeProvider } from '@material-ui/core';
 
 import theme from '../components/ui/Theme';
-
-const db = firebase.firestore();
 
 class App extends Component {
 	state = {
@@ -100,15 +98,8 @@ class App extends Component {
 
 	editAppointment(e, item) {}
 
-	addReveiw = (tempApt) => {
-		db.collection('appointments')
-			.add(tempApt)
-			.then(function (docRef) {
-				console.log('Document written with ID: ', docRef.id);
-			})
-			.catch(function (error) {
-				console.error('Error adding document: ', error);
-			});
+	addReview = async (tempReview) => {
+	
 	};
 
 	render() {
@@ -140,14 +131,6 @@ class App extends Component {
 									);
 								}}
 							></Route>
-							{/*<Route path="/appointments-list">
-								<AppointmentsAll
-									appointments={this.state.appointments}
-									readAppointments={this.readAppointments}
-									handleDelete={this.handleDelete}
-									editAppointment={this.editAppointment}
-								/>
-							</Route>*/}
 							<Route path="/signin" component={SignIn} />
 							<Route path="/password-reset" component={PasswordReset} />
 							<Route path="/signup">
